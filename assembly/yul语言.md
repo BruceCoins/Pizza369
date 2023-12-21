@@ -304,7 +304,7 @@ EVM语言及内置函数(操作码)
 
 > 注意：sstore() 当把值从 0 设置为非 0 时消耗 20,000 gas，当把值改为 0 或保持为 0 不变时消耗 5000 gas
 
-####扩展资料：
+#### 扩展资料：
   - [全面解析 EVM 操作码含义](https://www.ethervm.io/)
   - [官方公布 EVM 操作码 gas 消耗情况](https://ethereum.org/zh/developers/docs/evm/opcodes/)
   - [深入理解 EVM 操作码 注意事项](https://cloud.tencent.com/developer/article/2207590)
