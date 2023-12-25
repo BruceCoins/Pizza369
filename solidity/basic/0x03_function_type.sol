@@ -4,13 +4,13 @@ pragma solidity ^0.8.0;
 /*
 @函数类型
 -   介绍
-    solidity的函数也可以作为函数的入参和出餐，与其他静态语言类似;
+    solidity的函数也可以作为其他函数参数，与其他静态语言类似;
     函数类型：function(<params types>) {external|internal}
             [pure|constant|view|payable] [returns (<return types>)]
     其中external/public函数拥有以下成员属性、方法：
         -   .address  返回函数所属合约地址
         -   .selector   函数选择器，本质上是函数签名的前4字节，bytes4类型；其计算方式公开：bytes4(keccak256(funcSign))
-            -   selector是函数对于合约的唯一标识，可以通过它来调用函数
+            -   selector 是函数对于合约的唯一标识，可以通过它来调用函数
         -   .gas(uint)   调用函数时指定可消耗的gas；新版本语法改为：somefunc{gas:xxx}
         -   .value(uint)  调用函数时给函数注入以太币，将被函数所属合约接收；新版本语法改为：somefunc{value:xxx}
 
