@@ -1,5 +1,12 @@
 pragma solidity ^0.4.24;
-pragma experimental "v0.5.0";
+pragma experimental "v0.5.0";   //允许 0.5.0 版本的安全特性,
+
+/**
+    好的合约函数结构分为三个阶段：
+    1. 检查条件
+    2. 执行动作 (可能会改变条件)
+    3. 与其他合约交互
+*/ 
 
 // 导入外部包  此包中主要是一些
 // 安全的数学运算 
@@ -19,20 +26,25 @@ contract PAXImplementation {
     string public constant symbol = "PAX";  // 代币符号
     uint8 public constant decimals = 18;    // 代币精度
 
-    // ERC20 DATA
+    // mapping( 地址1 => mapping( 地址2 => 数量 ))
+    // 地址1 允许 地址2 可以转走的 代币数量
     mapping (address => mapping (address => uint256)) internal allowed;
 
-    // 拥有者信息
+    // 合约拥有者信息
     address public owner;
 
     // 暂停交易
     bool public paused = false;
 
-    // 账号冻结
-    address public lawEnforcementRole;          // 账号地址
-    mapping(address => bool) internal frozen;   // 多有账号是否冻结的状态
+    // 除合约创建者外
+    // 设置一个法定的的强制角色 这个角色可以冻结或者解冻别人账户的token
+    address public lawEnforcementRole;
 
-    // 供应量控制
+    // 冻结账号列表
+    mapping(address => bool) internal frozen;   // 账号是否冻结的状态
+
+    // 除合约创建者外
+    // 设置一个供应量控制者角色
     address public supplyController;
 
     // 定义触发事件  当转账或者授权别人转账时 调用此事件  当调用时 其实质会在以太坊节点区块上写入日志。
@@ -129,7 +141,7 @@ contract PAXImplementation {
     }
 
     /*
-        ERC20接口 实现了 _from地址下容许调用方可以转出金额到其他_to
+        ERC20接口 实现 _from地址下容许调用方可以转出金额到其他_to
         此函数要求必须是非暂停状态
      */
     function transferFrom(
@@ -154,8 +166,8 @@ contract PAXImplementation {
     }
 
     /**
-      ERC20接口 实现调用方容许_spender 可以从我的账户转出的金额  这个函数和上面的函数是相对应的。
-      只有一个账户容许了其他账户能从我的账户转出的金额 上述的函数才能转账成功。
+        ERC20接口 实现 调用方允许_spender 可以从我的账户转出的金额  这个函数和上面的函数是相对应的。
+        只有一个账户容许了其他账户能从我的账户转出的金额 上述的函数才能转账成功。
      */
     function approve(address _spender, uint256 _value) public whenNotPaused returns (bool) {
         require(!frozen[_spender] && !frozen[msg.sender], "address frozen");
@@ -178,26 +190,7 @@ contract PAXImplementation {
         return allowed[_owner][_spender];
     }
 
-    // OWNER FUNCTIONALITY
-
-    /**
-        这个函数被称为修饰函数 上面的whenNotPaused 也是一个修饰函数  实质是一种断言。 只有
-        断言通过 才会执行函数内部的内容
-     */
-    modifier onlyOwner() {
-        require(msg.sender == owner, "onlyOwner");
-        _;
-    }
-
-    /*
-        将只能合约的拥有者转给别人
-     */
-    function transferOwnership(address _newOwner) public onlyOwner {
-        require(_newOwner != address(0), "cannot transfer ownership to address zero");
-        emit OwnershipTransferred(owner, _newOwner);
-        owner = _newOwner;
-    }
-
+//------------------------------合约拥有者相关函数------------------------------------
     /**
      *  修饰函数 要求处于非暂停交易状态
      */
@@ -207,7 +200,25 @@ contract PAXImplementation {
     }
 
     /**
-     * 只有合约的拥有者才可以设置暂停交易
+        修饰函数 上面的whenNotPaused 也是一个修饰函数  实质是一种断言。 
+        只有断言通过 才会执行函数内部的内容
+     */
+    modifier onlyOwner() {
+        require(msg.sender == owner, "onlyOwner");
+        _;
+    }
+
+    /*
+        将 智能合约 的拥有权转给别人
+     */
+    function transferOwnership(address _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "cannot transfer ownership to address zero");
+        emit OwnershipTransferred(owner, _newOwner);
+        owner = _newOwner;
+    }
+
+    /**
+       只有合约的拥有者才可以设置暂停交易
      */
     function pause() public onlyOwner {
         require(!paused, "already paused");
@@ -216,7 +227,7 @@ contract PAXImplementation {
     }
 
     /**
-     * 只有合约的拥有者才能取消暂停交易
+       只有合约的拥有者才能取消暂停交易
      */
     function unpause() public onlyOwner {
         require(paused, "already unpaused");
@@ -227,9 +238,8 @@ contract PAXImplementation {
     // LAW ENFORCEMENT FUNCTIONALITY
 
     /**
-     设置一个法定的的强制角色 这个角色可以冻结或者解冻别人账户的token
-     设置一个这样的角色要求首先调用方要么是合约的拥有者 要么自己已经是法定的强制者
-     * @param _newLawEnforcementRole The new address allowed to freeze/unfreeze addresses and seize their tokens.
+        设置一个法定的的强制角色 这个角色可以冻结或者解冻别人账户的token
+        设置一个这样的角色要求首先调用方要么是合约的拥有者 要么自己已经是法定的强制者
      */
     function setLawEnforcementRole(address _newLawEnforcementRole) public {
         require(msg.sender == lawEnforcementRole || msg.sender == owner, "only lawEnforcementRole or Owner");
@@ -239,13 +249,13 @@ contract PAXImplementation {
 
     // 断言函数 要求调用方必须是强制者角色
     modifier onlyLawEnforcementRole() {
-        require(msg.sender == lawEnforcementRole, "onlyLawEnforcementRole");
+        require(msg.sender == lawEnforcementRole || msg.sender == owner, "onlyLawEnforcementRole");
         _;
     }
 
     /**
-      冻结某个账户的token  使用了断言 onlyLawEnforcementRole 也是只有调用方角色是
-      法定强制者才有权限冻结别人的token
+        冻结某个账户的token  使用了断言 onlyLawEnforcementRole 也是只有调用方角色是
+        法定强制者才有权限冻结别人的token
      */
     function freeze(address _addr) public onlyLawEnforcementRole {
         require(!frozen[_addr], "address already frozen");
@@ -255,7 +265,7 @@ contract PAXImplementation {
 
     /**
         解冻某个账户的token  使用了断言 onlyLawEnforcementRole 也是只有调用方角色是
-      法定强制者才有权限解冻别人的token
+        法定强制者才有权限解冻别人的token
      */
     function unfreeze(address _addr) public onlyLawEnforcementRole {
         require(frozen[_addr], "address already unfrozen");
@@ -264,33 +274,32 @@ contract PAXImplementation {
     }
 
     /**
-    摧毁冻结账户的token 也就是说如果这个地址是一个冻结地址调用这个函数会把这个地址的token销毁同时总供应数量也会被减少
-    当然这个函数也不是谁都可以调用的 只有法定的强制者才有权限
+        摧毁冻结账户的token, 即如果 参数是一个 冻结地址 ，会把这个地址的token销毁同时总供应数量也会被减少。
+        只有法定的强制者才有权限
      */
     function wipeFrozenAddress(address _addr) public onlyLawEnforcementRole {
-        require(frozen[_addr], "address is not frozen");
-        uint256 _balance = balances[_addr];
-        balances[_addr] = 0;
-        totalSupply_ = totalSupply_.sub(_balance);
+        require(frozen[_addr], "address is not frozen");    // 该地址是否被冻结
+        uint256 _balance = balances[_addr];                 // 获得地址的代币数量
+        balances[_addr] = 0;                                // 地址代币数量清零
+        totalSupply_ = totalSupply_.sub(_balance);          // 总供应量减少
         emit FrozenAddressWiped(_addr);
         emit SupplyDecreased(_addr, _balance);
         emit Transfer(_addr, address(0), _balance);
     }
 
     /**
-    用于检查某个地址是否被冻结了
+        用于检查某个地址是否被冻结了
     */
     function isFrozen(address _addr) public view returns (bool) {
         return frozen[_addr];
     }
 
-    // SUPPLY CONTROL FUNCTIONALITY
+    //-----------------------------------供应量控制的相关函数-------------------------------------
 
     /**
-    设置token供应量的控制着 在合约初始化时 token供应量是合约发起则  调用这个函数可以更改
-    这个函数只有调用方已经是token供应量控制着或者整个合约的拥有者才能调用成功
-    也就是在整个合约中 合约的拥有者实质是可以控制一切权限的。 它能更改法定强制者 更改总token
-    供应量的控制者。
+        设置token供应量的控制者： 
+        1> 在合约初始化时，token供应量是合约发起则  
+        2> 法定强制者、合约创建者可以调用这个函数可以更改总token供应量的控制者。
      */
     function setSupplyController(address _newSupplyController) public {
         require(msg.sender == supplyController || msg.sender == owner, "only SupplyController or Owner");
@@ -300,15 +309,15 @@ contract PAXImplementation {
     }
 
     modifier onlySupplyController() {
-        require(msg.sender == supplyController, "onlySupplyController");
+        require(msg.sender == supplyController || msg.sender == owner, "onlySupplyController or Owner");
         _;
     }
 
     /**
-    增加总的token供应量 并把新增供应量加到supplyController这个账户的名下。
+        增加总的token供应量 并把新增供应量加到supplyController这个账户的名下。
      */
     function increaseSupply(uint256 _value) public onlySupplyController returns (bool success) {
-        totalSupply_ = totalSupply_.add(_value);
+        totalSupply_ = totalSupply_.add(_value);        // 供应总量增加
         balances[supplyController] = balances[supplyController].add(_value);
         emit SupplyIncreased(supplyController, _value);
         emit Transfer(address(0), supplyController, _value);
@@ -316,8 +325,8 @@ contract PAXImplementation {
     }
 
     /**
-    减少总的token供应量 待减少供应量从supplyController这个账户的名下减掉 。
-    这个函数要求supplyController 
+        减少总的token供应量 待减少供应量从supplyController这个账户的名下减掉 。
+        这个函数要求supplyController 
      */
     function decreaseSupply(uint256 _value) public onlySupplyController returns (bool success) {
         require(_value <= balances[supplyController], "not enough supply");
@@ -330,13 +339,13 @@ contract PAXImplementation {
 }
 
 /**
-后记：
-PAX除了具有这个ERC20的功能外，还具有一些其他功能:
+    后记：
+    PAX除了具有ERC20的功能外，还具有一些其他功能:
 
-可以暂停整个代币转账
-可以增加或者减少整个代币的数量
-可以任意冻结或者解冻某个账户的代币
-可以销毁某个冻结账户的代币
-可以转移合约控制权。可以转移总供应量控制权。
-总的来说PAX币做的限制特别多， 它的合约拥有者可以做任何事情。 就算token转移给你了， 依然能分分钟钟消失。
+    可以暂停整个代币转账
+    可以增加或者减少整个代币的数量
+    可以任意冻结或者解冻某个账户的代币
+    可以销毁某个冻结账户的代币
+    可以转移合约控制权。可以转移总供应量控制权。
+    总的来说PAX币做的限制特别多， 它的合约拥有者可以做任何事情。 就算token转移给你了， 依然能分分钟钟消失。
 */
