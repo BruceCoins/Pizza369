@@ -4,11 +4,14 @@
 
 pragma solidity ^0.8.4;
 
+//-----------------------------------------------------------------
+//
 // 源码解析 NFT标准
 // 源码：https://github.com/chiru-labs/ERC721A/tree/main/contracts
 // 解析：https://blog.csdn.net/sitebus/article/details/124252119
 //      https://blog.csdn.net/WongSSH/article/details/128907399
-// 
+//
+//-----------------------------------------------------------------
 
 
 /**

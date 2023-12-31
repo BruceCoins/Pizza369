@@ -6,8 +6,13 @@ import "./IERC20.sol";
 import "./IERC20Metadata.sol";
 import "./Context.sol";
 
+//------------------------------------------------
+//
 // 源码解析及实战应用，请查看：
 // https://learnblockchain.cn/article/4860 
+//
+//------------------------------------------------
+
 
 /**
  * @dev Implementation of the {IERC20} interface.

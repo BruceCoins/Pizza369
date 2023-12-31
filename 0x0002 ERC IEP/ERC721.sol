@@ -5,12 +5,16 @@ pragma solidity ^0.8.20;
 
 import {IERC165} from "../../utils/introspection/IERC165.sol";
 
+//------------------------------------------------------------------------------------
+//
 // 源码详解：
 // https://learnblockchain.cn/article/4507#_afterTokenTransfer%20%E5%87%BD%E6%95%B0
 // https://zhuanlan.zhihu.com/p/393935101 
 // https://learnblockchain.cn/docs/eips/eip-721.html#%E8%A7%84%E8%8C%83
 //
 // 注意：每个符合ERC721的智能合约必须同时符合ERC721和ERC165。
+//
+//-----------------------------------------------------------------------------------
 
 
 /**
