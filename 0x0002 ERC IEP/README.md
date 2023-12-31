@@ -4,15 +4,15 @@
 
 ### 2. 协议标准
 
-ERC列表：https://eips.ethereum.org/erc
+ERC列表：https://eips.ethereum.org/erc  
 EIP列表：https://eips.ethereum.org/all
 
 ### 3. 重要协议标准
 
 #### ERC-20  
 [ERC-20 代币标准](https://eips.ethereum.org/EIPS/eip-20)  
-[OpenZeppelin-ERC-20 文档](https://docs.openzeppelin.com/contracts/3.x/tokens#ERC20)
-[OpenZeppelin-ERC-20 实施](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol)
+[OpenZeppelin-ERC-20 文档](https://docs.openzeppelin.com/contracts/3.x/tokens#ERC20)  
+[OpenZeppelin-ERC-20 实施](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol)  
 ERC-20 是由以太坊联合创始人Vitalik Buterin在2015年6月提出的，它是一个简单的接口，允许开发者在以太坊区块链之上创建他们的代币，并将其与第三方应用程序（如钱包和交易所）集成。
 
 除了允许创建者使用简单的功能，比如限制他们的币的总供应量，ERC-20代币、去中心化应用（DApps）和智能合约之间也有直接的互动。ERC-20是加密行业最广泛接受的代币标准，大多数数字资产钱包、交易所（包括AAX）和其他服务都支持该标准。
@@ -30,8 +30,8 @@ ERC-20 是由以太坊联合创始人Vitalik Buterin在2015年6月提出的，�
 -----------------
 #### ERC-721  
 [ERC-721 NFT标准](https://eips.ethereum.org/EIPS/eip-721)  
-[OpenZeppelin-ERC-721 文档](https://docs.openzeppelin.com/contracts/3.x/erc721)
-[OpenZeppelin-ERC-721 实施](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol)
+[OpenZeppelin-ERC-721 文档](https://docs.openzeppelin.com/contracts/3.x/erc721)  
+[OpenZeppelin-ERC-721 实施](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol)  
 ERC721 标准是由 CryptoKitties 的 CTO Dieter Shirley 于2018年1月所创建和发布的，Dieter Shirley 是 NFT 的奠基人之一。该协议是以太坊的针对非同质化代币 NFT 数字资产的第一个标准，应用于 CryptoKitties、Decentraland 等项目。
 
 ERC721 是一个 ERC20 的变种。两者之间最主要的区别是，ERC 721 token 是非同质化的(non-fungible)，也即：每一个 token 都与其他 token 不同。为了区分 ERC721 token，每一个都有一个唯一的 ID，通常用来当作 token 铸造的计数器。ERC721 token 也对于所有权有额外的概念：每个 token 的拥有者都在合约中存储。这意味着每次的转移（或者授权转移）都是针对不同 token ID 的单个 token。  
@@ -73,7 +73,7 @@ ERC-721C **NFT标准** 是由 Limit Break 提出，它是对以太坊上 ERC-721
 
 -----------------
 #### ERC-777  
-[ERC-777 代币标准](https://eips.ethereum.org/EIPS/eip-777)  
+[ERC-777 代币标准](https://eips.ethereum.org/EIPS/eip-777)    
 由Jordi Baylina, Jacques Dafflon和Thomas Shababi于2017年11月创建。
 
 **ERC-20 的问题:** 
@@ -89,8 +89,8 @@ ERC-721C **NFT标准** 是由 Limit Break 提出，它是对以太坊上 ERC-721
 
 -----------------
 #### ERC-1155  
-[ERC-1155 多代币标准](https://eips.ethereum.org/EIPS/eip-1155)
-[OpenZeppelin-ERC-1155 文档](https://docs.openzeppelin.com/contracts/3.x/erc1155)
+[ERC-1155 多代币标准](https://eips.ethereum.org/EIPS/eip-1155)  
+[OpenZeppelin-ERC-1155 文档](https://docs.openzeppelin.com/contracts/3.x/erc1155)  
 
 用于多种代币管理的合约标准接口。单个部署的合约可以包括同质化代币、非同质化代币或其他配置（如半同质化代币）的任何组合。多用于游戏领域。
 
@@ -132,7 +132,7 @@ ERC-4337消除了此类限制。通过ERC-4337，用户可以享用同时具备�
 
 -----------------
 #### ERC-4626
-[ERC-4626 代币化金库标准](https://eips.ethereum.org/EIPS/eip-4626)
+[ERC-4626 代币化金库标准](https://eips.ethereum.org/EIPS/eip-4626)  
 
 ERC-4626，是一种代币化保险库的标准协议，代表着可产生收益的代币份额，并基于ERC-20代币标准进行构建。  
 
