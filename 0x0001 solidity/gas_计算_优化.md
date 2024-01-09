@@ -279,6 +279,7 @@ contract Math {
     }
 }
 
+// 内部调用Math
 contract Test is Math {
     uint sum;
 
@@ -302,7 +303,7 @@ contract Test {
     uint sum;
     address constant MathContractAddr = 0x9549DfbBd66b3Cc078AD834C74b9EE1808Ef3AEB;
 
-    // 消耗 43693 gas
+    // 外部调用，消耗 43693 gas
     function calculate(uint _x, uint _y) public {
         sum = Math(MathContractAddr).add(_x, _y); 
     }
