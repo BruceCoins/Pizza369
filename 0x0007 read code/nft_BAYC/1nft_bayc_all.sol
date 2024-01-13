@@ -6,7 +6,7 @@
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.6.0 <0.8.0;
+pragma solidity >=0.6.0 <0.8.2;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -1064,7 +1064,7 @@ pragma solidity >=0.6.0 <0.8.0;
  * ```
  *
  * As of v3.0.0, only maps of type `uint256 -> address` (`UintToAddressMap`) are
- * supported.
+ * supported.    枚举映射
  */
 library EnumerableMap {
     // To implement this library for multiple types with as little code
@@ -1076,38 +1076,45 @@ library EnumerableMap {
     // This means that we can only create new EnumerableMaps for types that fit
     // in bytes32.
 
+    // 结构体 键、值
     struct MapEntry {
         bytes32 _key;
         bytes32 _value;
     }
 
+    // 结构体，map的数组，键的索引映射
     struct Map {
         // Storage of map keys and values
         MapEntry[] _entries;
 
         // Position of the entry defined by a key in the `entries` array, plus 1
         // because index 0 means a key is not in the map.
-        mapping (bytes32 => uint256) _indexes;
+        mapping (bytes32 => uint256) _indexes; // 索引存放 <key, value在数组 _entries 的长度>
     }
 
     /**
      * @dev Adds a key-value pair to a map, or updates the value for an existing
-     * key. O(1).
+     * key. O(1). 没有就添加，有就更新value值
      *
      * Returns true if the key was added to the map, that is if it was not
      * already present.
      */
     function _set(Map storage map, bytes32 key, bytes32 value) private returns (bool) {
         // We read and store the key's index to prevent multiple reads from the same storage slot
+        // 我们读取并存储 <键> 的索引以防止从同一个存储槽进行多次读取
         uint256 keyIndex = map._indexes[key];
 
-        if (keyIndex == 0) { // Equivalent to !contains(map, key)
+        // 键的索引值为0 ，<键、值>不存在，即未添加到索引中，Equivalent to !contains(map, key) 
+        if (keyIndex == 0) { 
+            // 将 <key、value> 添加到 数组中，数组长度自动 + 1
             map._entries.push(MapEntry({ _key: key, _value: value }));
             // The entry is stored at length-1, but we add 1 to all indexes
             // and use 0 as a sentinel value
+            // 将 数组长度 作为索引值索引的 value 值 <key、value在数组中的长度>
             map._indexes[key] = map._entries.length;
             return true;
         } else {
+            // 索引值不为0，即索引已经存在，更新value值，keyIndex-1 是数组获取下标
             map._entries[keyIndex - 1]._value = value;
             return false;
         }

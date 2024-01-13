@@ -53,11 +53,11 @@
         */
         function reserveApes() public onlyOwner {        
             //获取当前总供给量
-            uint supply = totalSupply();
+            uint supply = totalSupply(); //totalSupply() ERC721函数
             //mint 30个新的BAYC
             uint i;
             for (i = 0; i < 30; i++) {
-                _safeMint(msg.sender, supply + i);
+                _safeMint(msg.sender, supply + i); //_safeMint() ERC721函数
             }
         }
 
@@ -110,17 +110,19 @@
             
             //铸造对应数量的APE
             for(uint i = 0; i < numberOfTokens; i++) {
-            //获取总供应量 该方法继承于 ERC721 合约
+                //获取总供应量 该方法继承于 ERC721 合约
                 uint mintIndex = totalSupply();
             
                 if (totalSupply() < MAX_APES) {
-            //铸造BAYC msg.sender铸造者地址，mintIndex 铸造的BAYC的tokenId 该方法继承于 ERC721 合约
+                    //铸造BAYC msg.sender铸造者地址，mintIndex 铸造的BAYC的tokenId 该方法继承于 ERC721 合约
                     _safeMint(msg.sender, mintIndex);
                 }
             }
 
             // If we haven't set the starting index and this is either 1) the last saleable token or 2) the first token to be sold after
             // the end of pre-sale, set the starting index block
+            // 如果我们还没有设置起始索引，二选一设置索引 1) 最后一个可出售的代币或 2) 之后要出售的第一个代币
+            // 预售结束，设置起始索引块
             if (startingIndexBlock == 0 && (totalSupply() == MAX_APES || block.timestamp >= REVEAL_TIMESTAMP)) {
                 startingIndexBlock = block.number;
             } 
