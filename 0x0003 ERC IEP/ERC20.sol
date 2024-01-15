@@ -10,6 +10,7 @@ import "./Context.sol";
 //
 // 源码解析及实战应用，请查看：
 // https://learnblockchain.cn/article/4860 
+// https://learnblockchain.cn/article/4506
 //
 //------------------------------------------------
 
