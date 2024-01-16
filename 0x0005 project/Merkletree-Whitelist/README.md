@@ -7,3 +7,6 @@
 ## Merkle 树  
 
 [![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Hash_Tree.svg/1920px-Hash_Tree.svg.png)](MerkleTree)
+
+## 参考文献  
+[使用默克尔(Merkle)树实现NFT白名单](https://learnblockchain.cn/article/4521)

@@ -25,7 +25,7 @@ const root = tree.getHexRoot()
 // 0xeD2827f8f76892320e73f90e4D49Ebf8a0Af7c43
 let leaf = address[0]
 
-//获取proof
+//获取proof, 'getHexProof'将返回相邻节点、父节点的hash值，
 let proof = tree.getHexProof(keccak256(leaf))
 
 // ["0xb7b19092bad498eae34230a9e14c8ce3d9d85b2bb91212108c9d47d1948acfeb","0x1f957db768cd7253fad82a8a30755840d536fb0ffca7c5c73fe9d815b1bc2f2f","0x924862b314bd38813a325167aca7caee16318f07303bd8e9f81bbe5808575fbf","0xe5076a139576746fd34a0fd9c21222dc274a909421fcbaa332a5af7272b6dcb1","0x148c730f8169681c1ebfb5626eb20af3d2351445463a1fdc5d0b116c62dc58c8","0x5712507eeb3d7b48e5876f21fc871656c2379464b480c8e89c50c2a1e8f58ac5"]
