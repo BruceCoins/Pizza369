@@ -4,8 +4,11 @@
 **windows 10** 环境下使用 Truffle，需要四个东西，分别如下:
 - **Python** : 需要用到 python 环境
 - **Nodejs** :是一个基于 google 浏览器 Chrome 里面的 JavaScript 引擎（V8）的一个平台，可以很容易的构建快速而具有扩展性的网络程序。
-    > [!NOTE]  
+
+    >  
     > **npm** ：是Node.js的包管理工具，Ganache 需要用到 npm。
+    >  
+
 - **Truffle** ：以太坊开发框架
 - **Ganache CLI**：是在本地使用内存模拟的一个以太坊环境，其基于 Node.js，以前叫TestRPC在开发过程中使用。  
 
@@ -31,10 +34,10 @@ npm install -g truffle
 truffle -v   // 查看版本
 truffle      // 查看命令行
 ```
-![truffle安装成功了]()
+![truffle安装成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_version.png)
 
 #### 报错1：npm ERR! code ERR_SOCKET_TIMEOUT  
-![npm下载源报错]()
+![npm下载源报错](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/err_truffle_socket_timeout.png)
 
 ##### 问题原因：
 报错中的ERR_S0CKET_TINEOUT表示安装npm包时出现网络连接超时。这通常是由于网络连接不稳定、代理配置不正确或网络设置有问题导致的。
@@ -45,10 +48,10 @@ truffle      // 查看命令行
 
 
 #### 报错2：gyp ERR! configure error
-![python环境报错]()  
+![python环境报错](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/err-truffle-python1.png)  
 ##### 问题原因：  
 python环境的问题。
 
 ##### 解决办法： 
-安装python环境。
+查看python安装教程，自行安装 https://zhuanlan.zhihu.com/p/122435116  
 也可参照此链接进行安装 https://blog.csdn.net/xuecuilan/article/details/90379919
