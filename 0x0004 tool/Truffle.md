@@ -55,3 +55,21 @@ python环境的问题。
 ##### 解决办法： 
 查看python安装教程，自行安装 https://zhuanlan.zhihu.com/p/122435116  
 也可参照此链接进行安装 https://blog.csdn.net/xuecuilan/article/details/90379919
+
+### 4、安装Ganache-CLI  
+- 全局安装
+```cmd
+npm install -g ganache-cli
+```  
+![安装canache-cli](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_install.png)  
+- 验证是否安装成功  
+
+因为是通过npm进行的全局安装，可通过命令查看npm所有全局安装的模块
+```cmd
+npm list -g 
+```  
+- 启动ganache-cli  
+```cmd
+ganache-cli
+```  
+![启动ganache-cli](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_start.png)
