@@ -36,7 +36,7 @@ truffle      // 查看命令行
 ```
 ![truffle安装成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_version.png)
 
-#### 报错1：npm ERR! code ERR_SOCKET_TIMEOUT  
+#### 【报错 1】：npm ERR! code ERR_SOCKET_TIMEOUT  
 ![npm下载源报错](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/err_truffle_socket_timeout.png)
 
 ##### 问题原因：
@@ -47,7 +47,7 @@ truffle      // 查看命令行
 将registry [**设置为淘宝镜像源**](https://blog.csdn.net/t_y_f_/article/details/131387826) 可以提高下载速度并减少连接问题，因为淘宝镜像源在国内具有更好的稳定性和可靠性。  
 
 
-#### 报错2：gyp ERR! configure error
+#### 【报错2】：gyp ERR! configure error
 ![python环境报错](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/err-truffle-python1.png)  
 ##### 问题原因：  
 python环境的问题。
@@ -73,3 +73,68 @@ npm list -g
 ganache-cli
 ```  
 ![启动ganache-cli](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_start.png)
+
+### 5、使用unbox创建项目  
+
+一定要创建、进入新目录：
+```shell
+md MetaCoin
+cd MetaCoin
+```
+在新目录下 下载 “unbox” MetaCoin box:
+```
+truffle unbox metacoin
+```  
+#### 成功  
+![unbox下载metacoin成功](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox_suc.png)  
+
+#### 【报错 1】找不到truffle-box.json文件  
+
+连接不到网络，在 https://raw.githubusercontent.com 地址下找不到 truffle-box.json文件。  
+
+![找不到啊](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox_err1.png)    
+
+    网上查了很多资料，主要的解决方案就是 配置 hosts文件。
+
+- 修改配置文件hosts  
+1> 记事本 ---> 右键 ---> 使用管理员身份运行，
+2> 文件 ---> 打开 ---> 找到hosts文件
+3> 添加以下内容：
+
+```cmd
+# GitHub Start
+192.30.255.112	gist.github.com
+192.30.255.112	github.com
+192.30.255.112	www.github.com
+185.199.111.133	raw.githubusercontent.com
+# GitHub End
+```
+
+[查看 raw.githubusercontent.com 的 ip 地址](https://sites.ipaddress.com/raw.githubusercontent.com/) ，在以下四个地址中，任选其一尝试：
+![ip地址](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox1.png)
+
+测试中，如果只添加 185.199.111.133 依然会报错，所以最好都加上：
+![仍然报错](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox_err2.png)
+
+
+- 下载 truffle-box.json文件  
+只修改 hosts 依然不能解决问题，只能使出杀手锏了，缺啥补啥，直接[下载truffle-box.json文件](https://github.com/truffle-box/metacoin-box/blob/master/truffle-box.json) 放到项目目录下
+
+文件内容如下，也可拷贝、创建truffle-box.json文件。
+```json
+{
+  "ignore": [
+    "README.md",
+    ".git",
+    ".gitignore"
+  ],
+  "commands": {
+    "Compile contracts": "truffle compile",
+    "Migrate contracts": "truffle migrate",
+    "Test contracts": "truffle test"
+  },
+  "hooks": {
+    "post-unpack": ""
+  }
+}
+```
