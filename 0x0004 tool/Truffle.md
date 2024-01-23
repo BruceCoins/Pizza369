@@ -82,7 +82,7 @@ ganache-cli
 
 --------  
 
-## 5、使用unbox创建项目  
+## 5、使用 box 模板创建项目  
 
 一定要创建、进入新目录：
 ```shell
@@ -126,10 +126,12 @@ truffle unbox metacoin
 ![仍然报错](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox_err2.png)
 
 ### 【报错 3】配置完 hosts 仍然报错 connect ETIMEOUT  
-修改 hosts 依然不能解决问题，只能使出杀手锏了，缺啥补啥，直接[下载truffle-box.json文件](https://github.com/truffle-box/metacoin-box/blob/master/truffle-box.json) 放到项目目录下
+修改 hosts 依然不能解决问题，只能使出杀手锏了，缺啥补啥，直接[下载truffle-box.json文件](https://github.com/truffle-box/metacoin-box/blob/master/truffle-box.json) 放到项目目录下。
 
-truffle-box.json 文件内容如下，可拷贝、创建文件。
+也可以在项目空间手写一个 truffle-box.json 文件，内容如下，然后 再运行 `truffle unbox <box-name> `命令。
 ```json
+truffle-box.json 文件
+
 {
   "ignore": [
     "README.md",
