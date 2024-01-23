@@ -1,3 +1,7 @@
+**Truffle 官方网站** https://trufflesuite.com  
+**Truffle 模板** https://trufflesuite.com/boxes/  
+**学习教程** https://blog.csdn.net/zhongliwen1981/article/details/90353895  
+
 # 环境搭建  
 **ubantu** 环境下安装请下载查看 [以太坊安装私有链.docx](https://github.com/BruceCoins/Pizza369/blob/main/0x0000%20docs/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%89%E8%A3%85%E7%A7%81%E6%9C%89%E9%93%BE.docx)  
 
