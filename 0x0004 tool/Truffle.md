@@ -1,6 +1,6 @@
 **Truffle 官方网站** https://trufflesuite.com  
 **Truffle 模板** https://trufflesuite.com/boxes/  
-**学习教程** https://blog.csdn.net/zhongliwen1981/article/details/90353895  
+**学习教程** https://decert.me/tutorial/solidity/tools/truffle_ganache/    
 
 # 环境搭建  
 **ubantu** 环境下安装请下载查看 [以太坊安装私有链.docx](https://github.com/BruceCoins/Pizza369/blob/main/0x0000%20docs/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%89%E8%A3%85%E7%A7%81%E6%9C%89%E9%93%BE.docx)  
@@ -30,6 +30,7 @@ npm -v
 ```
 
 ## 3、Truffle 安装  
+
 ```
 npm install -g truffle
 ``` 
@@ -80,25 +81,43 @@ ganache-cli
 
 至此环境安装完成，接下来通过使用 unbox 来创建 Truffle 项目   
 
+[下载 ganache 桌面客户端](https://trufflesuite.com/ganache/)  
+![ganache客户端来了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli.png)
+  
 --------  
 
-## 5、使用 box 模板创建项目  
+## 5、使用 truffle init 创建空白项目    
+使用 `truffle init` 命令可以在当前文件夹内创建一个空白项目：  
+```cmd
+md TruffleInit         // 创建一个新文件夹作为项目目录
+cd TruffleInit         // 进入
 
-一定要创建、进入新目录：
+truffle init           // 初始化空白项目
+``` 
+![truffle_init成功](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_init.png)  
+
+**Truffle项目默认包含以下文件及目录：**
+
+- contracts：存放智能合约文件目录  
+- migrations：迁移文件、用来指示如何部署智能合约  
+- test：智能合约测试用例文件夹。  
+- truffle-config.js：配置文件，配置truffle连接的网络及编译选项  
+
+编写合约看 **7、编写合约** 内容
+
+## 6、使用 box 模板创建项目  
+
+Truffle也提供了很多模板，使用 `truffle unbox <box-name>` 命令来加载模板，在模板基础上创建项目：
 ```shell
-md MetaCoin
-cd MetaCoin
+md MetaCoin              // 创建一个新文件夹作为项目目录
+cd MetaCoin              // 进入
+
+truffle unbox metacoin   // 下载模板 MetaCoin
 ```
-在新目录下 下载 “unbox” MetaCoin box:
-```
-truffle unbox metacoin
-```  
 ### 成功  
 ![unbox下载metacoin成功](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox_suc.png)  
 
-### 【报错 1】找不到truffle-box.json文件  
-
-连接不到网络，在 https://raw.githubusercontent.com 地址下找不到 truffle-box.json文件。  
+### 【报错 1】找不到truffle-box.json文件   
 
 ![找不到啊](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_unbox_err1.png)    
 
@@ -148,6 +167,10 @@ truffle-box.json 文件
   }
 }
 ```
+
+## 7、编写合约  
+继续在 创建的空白项目中进行 
+
 ---------------  
 ## 参考文献：
 [Truffle中文文档](https://learnblockchain.cn/docs/truffle/getting-started/creating-a-project.html)    
