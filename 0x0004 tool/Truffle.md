@@ -169,7 +169,57 @@ truffle-box.json 文件
 ```
 
 ## 7、编写合约  
-继续在 创建的空白项目中进行 
+继续在通过 `truffle init` 命令创建的空白项目中进行。    
+
+在 `contracts/` 文件夹下新建一个Counter.sol 文件：
+```solidity
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Counter {
+    uint counter;
+
+    constructor() {
+        counter = 0;
+    }
+
+    function add() public {
+        counter = counter + 1;
+    }
+
+    function get() public view returns (uint) {
+        return counter;
+    }
+}
+```  
+## 8、编译合约  
+- ### 配置文件
+
+`truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。
+可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
+
+此处简单配置, 使用 `solc` 配置 Solidity 版本信息：
+```
+module.exports = {
+      compilers: {
+      solc: {
+        version: "0.8.9"
+      }
+    }
+  }
+```
+
+- ### 进行编译
+启动 区块链 环境平台，3 种方法，任选其一即可：    
+
+1> 直接运行 ganache 客户端启动。需另开一个 cmd 窗口运行**编译**命令。  
+2> 开 cmd 窗口，使用命令行 `ganache-cli` 启动区块链环境。 需另开一个 cmd 窗口运行**编译**命令。  
+3> 开 cmd 窗口，使用命令行 `truffle develop` 启动 truffle 自带的区块链环境。需要在 **项目根目录下** 执行此命令行，然后直接运行 **编译、部署** 命令，无需另开一个 cmd 窗口。  
+
+```cmd
+truffle compile
+```
+成功编译后，会在 `build/contracts/` 目录下生成 `Counter.json`文件， Counter.json 包含了智能合约的 ABI 、字节码（Bytecode）以及合约元数据等。
 
 ---------------  
 ## 参考文献：
