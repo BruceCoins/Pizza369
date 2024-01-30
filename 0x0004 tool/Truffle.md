@@ -195,11 +195,11 @@ contract Counter {
 ## 8、编译合约  
 - ### 配置文件
 
-`truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。
+`truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。  
 可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
 
 此处简单配置, 使用 `solc` 配置 Solidity 版本信息：
-```
+```json
 module.exports = {
       compilers: {
       solc: {
@@ -219,7 +219,47 @@ module.exports = {
 ```cmd
 truffle compile
 ```
-成功编译后，会在 `build/contracts/` 目录下生成 `Counter.json`文件， Counter.json 包含了智能合约的 ABI 、字节码（Bytecode）以及合约元数据等。
+成功编译后，会在 `build/contracts/` 目录下生成 `Counter.json`文件， Counter.json 包含了智能合约的 ABI 、字节码（Bytecode）以及合约元数据等。  
+
+![编译成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_compile.png)  
+
+## 9、部署合约  
+在部署合约前，还需要确定：
+
+- 确定部署到哪一个网络， 这可以使用 `truffle-config.js` 来进行配置  
+- 确定如何部署合约，例如传递什么参数给合约，这需要我们编写部署脚本  
+之后就可以运行 `truffle migrate` 执行部署。
+
+### 配置部署到哪个网络  
+部署流程：
+1. 在本地的开发者网络（如：Ganache）进行部署，测试及验证代码逻辑的正确性
+2. 在测试网络（如：Goerli）进行灰度发布
+3. 一切 OK 后部署在主网（如： 以太坊主网）
+
+`truffle-config.js` 中，使用 `networks`: 选项用来配置不同的网络。可以通过指定不同的网络配置，来连接不同的EVM网络， 如下配置了两个网络：  
+[具体参数可参考此文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
+```json
+module.exports = {
+  networks: {
+    development: {
+      host: "127.0.0.1",
+      port: 7545,
+      gas: 5500000           //  gas limit
+      gasPrice: 10000000000,  // 10 Gwei 
+    },
+    
+    goerli: {
+      provider: () => new HDWalletProvider(MNEMONIC,  NODE_RPC_URL),
+      network_id: 5,       // Goerli's chain id
+      confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
+      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+    },
+  }
+};
+```
+
+
 
 ---------------  
 ## 参考文献：
