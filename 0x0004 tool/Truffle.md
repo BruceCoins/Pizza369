@@ -191,15 +191,16 @@ contract Counter {
         return counter;
     }
 }
-```  
-## 8、编译合约  
-- ### 配置文件
+```
 
+## 8、编译部署  
 `truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。  
-可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
+可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)    
 
-此处简单配置, 使用 `solc` 配置 Solidity 版本信息：
-```json
+### 1> 只是在开发环境下进行简单测试  
+#### 1.1> 配置文件  
+只需简单配置, 使用 `solc` 配置 Solidity 版本信息：
+```
 module.exports = {
       compilers: {
       solc: {
@@ -208,12 +209,11 @@ module.exports = {
     }
   }
 ```
+#### 1.2> 编译合约  
+启动 本地环境，3 种方法，任选其一即可：    
 
-- ### 进行编译
-启动 区块链 环境平台，3 种方法，任选其一即可：    
-
-1> 直接运行 ganache 客户端启动。需另开一个 cmd 窗口运行**编译**命令。  
-2> 开 cmd 窗口，使用命令行 `ganache-cli` 启动区块链环境。 需另开一个 cmd 窗口运行**编译**命令。  
+1> 直接运行 ganache 客户端启动。需另开一个 cmd 窗口运行**编译**命令。（如图） 
+2> 开 cmd 窗口，使用命令行 `ganache-cli` 启动区块链环境。 需另开一个 cmd 窗口运行**编译**命令。（如图）  
 3> 开 cmd 窗口，使用命令行 `truffle develop` 启动 truffle 自带的区块链环境。需要在 **项目根目录下** 执行此命令行，然后直接运行 **编译、部署** 命令，无需另开一个 cmd 窗口。  
 
 ```cmd
@@ -223,41 +223,104 @@ truffle compile
 
 ![编译成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_compile.png)  
 
-## 9、部署合约  
+#### 1.3> 部署合约  
+```cmd
+truffle migrate
+```
+- 使用 `ganache` 时，与编译合约使用一个窗口即可（如图）
+- 使用 `truffle develop` 时，不需另开一个窗口
+
+![部署成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate.png) 
+
+
+### 2> 若要连接以太坊 测试网、主网，需使用 truffle-hardware 提供器。  
+
+- 安装dotenv模块、hardware提供器  
+
+```cmd
+npm install dotenv --save
+npm install truffle-hdwallet-provider
+```
+#### 2.1> 配置文件  
+- 在项目的根目录中创建一个名为 `.env` 的新文件（dotenv需要）并添加以下内容：  
+```
+MNEMONIC = "<即钱包私钥或助记词>"
+SEPOLIA_INFURA_API_KEY = "https://sepolia.infura.io/v3/<Your-API-Key>"
+GOERLI_INFURA_API_KEY = "https://sepolia.infura.io/v3/<Your-API-Key>"
+
+```
+
+- `truffle-config.js` 配置 本地开发网络、以太坊测试网、以太坊主网 
+```javascript
+require('dotenv').config();
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const { MNEMONIC, SEPOLIA_INFURA_API_KEY,  } = process.env;
+
+module.exports = {
+  networks: {
+
+    // 本地开发网络
+    development: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"  // 匹配任何网络
+    },
+
+    // ganache
+    ganache: {
+      host: "127.0.0.1",
+      port: 8545,
+      network_id: "*"  // 匹配任何网络
+    }
+    
+    // 当前可使用的以太测试网：Goerli 和 Sepolia（其他测试网废弃公告 https://www.ethereum.cn/Eth2/testnet-deprecation/）
+    // 1> 以太测试网 Goerli    
+    goerli: {
+      provider: () => new HDWalletProvider(MNEMONIC,  INFURA_API_KEY),
+      network_id: 5,       // Goerli 网络id
+    },
+
+    // 2> 以太测试网 Sepolia
+    sepolia: {
+        provider: () => new HDWalletProvider(MNEMONIC, INFURA_API_KEY)
+        network_id: 5,       // Sepolia 网络id
+    }
+
+    // 以太主网
+    advanced: {
+      provider: () => new HDWalletProvider(mnemonic, `https://mainnet.infura.io`),
+      network_id: 1,       // Custom network
+    }
+  }
+};
+```
+对于每一个配置的网络，在未明确设置以下交易参数时，使用其默认值：
+```
+gas：部署合约的gas上限，默认值：4712388  
+gasPrice：部署合约时的gas价格，默认值：100000000000 wei，即100 shannon  
+from：执行迁移脚本时使用的账户，默认使用以太坊节点旳第一个账户  
+provider：默认的web3 provider，使用host和port配置选项构造：new Web3.providers.HttpProvider("http://<host>:<port>")  
+websockets：需要启用此选项以使用确认监听器，或者使用.on或.once监听事件。默认值为false  
+```
+
+## 10、部署合约  
 在部署合约前，还需要确定：
 
 - 确定部署到哪一个网络， 这可以使用 `truffle-config.js` 来进行配置  
 - 确定如何部署合约，例如传递什么参数给合约，这需要我们编写部署脚本  
 之后就可以运行 `truffle migrate` 执行部署。
 
-### 配置部署到哪个网络  
+### 配置部署到网络  
 部署流程：
 1. 在本地的开发者网络（如：Ganache）进行部署，测试及验证代码逻辑的正确性
 2. 在测试网络（如：Goerli）进行灰度发布
 3. 一切 OK 后部署在主网（如： 以太坊主网）
 
-`truffle-config.js` 中，使用 `networks`: 选项用来配置不同的网络。可以通过指定不同的网络配置，来连接不同的EVM网络， 如下配置了两个网络：  
+`truffle-config.js` 中，使用 `networks` : 选项用来配置不同的网络。可以通过指定不同的网络配置，来连接不同的EVM网络。  
 [具体参数可参考此文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
-```json
-module.exports = {
-  networks: {
-    development: {
-      host: "127.0.0.1",
-      port: 7545,
-      gas: 5500000           //  gas limit
-      gasPrice: 10000000000,  // 10 Gwei 
-    },
-    
-    goerli: {
-      provider: () => new HDWalletProvider(MNEMONIC,  NODE_RPC_URL),
-      network_id: 5,       // Goerli's chain id
-      confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
-      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
-    },
-  }
-};
-```
+
+#### 1> 前提准备  
+
 
 
 
