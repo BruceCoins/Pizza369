@@ -199,7 +199,7 @@ contract Counter {
 
 ### 1> 只是在开发环境下进行简单测试  
 #### 1.1> 配置文件  
-只需简单配置, 使用 `solc` 配置 Solidity 版本信息：
+只需简单配置, 使用 `solc` 配置编译器 solidity 版本信息：
 ```
 module.exports = {
       compilers: {
@@ -259,14 +259,15 @@ const { MNEMONIC, SEPOLIA_INFURA_API_KEY,  } = process.env;
 module.exports = {
   networks: {
 
-    // 本地开发网络
+    // 本地开发网络二选一即可，只是端口不同而已
+    // 1> 本地开发网络 truffle develop
     development: {
       host: "127.0.0.1",
       port: 7545,
       network_id: "*"  // 匹配任何网络
     },
 
-    // ganache
+    // 2> 本地开发网络 ganache
     ganache: {
       host: "127.0.0.1",
       port: 8545,
@@ -276,13 +277,13 @@ module.exports = {
     // 当前可使用的以太测试网：Goerli 和 Sepolia（其他测试网废弃公告 https://www.ethereum.cn/Eth2/testnet-deprecation/）
     // 1> 以太测试网 Goerli    
     goerli: {
-      provider: () => new HDWalletProvider(MNEMONIC,  INFURA_API_KEY),
+      provider: () => new HDWalletProvider(MNEMONIC,  GOERLI_INFURA_API_KEY),
       network_id: 5,       // Goerli 网络id
     },
 
     // 2> 以太测试网 Sepolia
     sepolia: {
-        provider: () => new HDWalletProvider(MNEMONIC, INFURA_API_KEY)
+        provider: () => new HDWalletProvider(MNEMONIC, SEPOLIA_INFURA_API_KEY)
         network_id: 5,       // Sepolia 网络id
     }
 
@@ -319,15 +320,16 @@ websockets：需要启用此选项以使用确认监听器，或者使用.on或.
 `truffle-config.js` 中，使用 `networks` : 选项用来配置不同的网络。可以通过指定不同的网络配置，来连接不同的EVM网络。  
 [具体参数可参考此文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
 
-#### 1> 前提准备  
-
 
 
 
 ---------------  
-## 参考文献：
+## 参考文献： 
 [Truffle中文文档](https://learnblockchain.cn/docs/truffle/getting-started/creating-a-project.html)    
 [Truffle 关于解决 unbox 搭建问题](https://github.com/trufflesuite/truffle/issues/2692)  
 [GoogleHosts](https://github.com/googlehosts/hosts/blob/master/hosts-files/hosts)    
 [Truffle 连接超时问题](https://blog.csdn.net/Ike_Lin/article/details/108279545)  
 [Truffle-box.json](https://github.com/truffle-box/metacoin-box/blob/master/truffle-box.json)  
+[Truffle详细配置文件参数文档](https://trufflesuite.com/docs/truffle/reference/configuration/#networks)
+[truffle部署合约到以太坊主网上](https://www.jianshu.com/p/a11bcea09809)
+[truffle部署指定的合约到指定网络](https://blog.csdn.net/u013288190/article/details/123849688)
