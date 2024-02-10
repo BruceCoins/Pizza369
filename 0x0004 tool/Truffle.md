@@ -1,14 +1,14 @@
-
+- [项目部署流程](#项目部署流程)
 - [环境搭建](#环境搭建)
   - [1、Python 安装](#1python-安装)
   - [2、Nodejs 安装](#2nodejs-安装)
   - [3、Truffle 安装](#3truffle-安装)
     - [【报错 1】：npm ERR! code ERR\_SOCKET\_TIMEOUT](#报错-1npm-err-code-err_socket_timeout)
-      - [问题原因：](#问题原因)
-      - [解决办法：](#解决办法)
+      - [问题原因](#问题原因)
+      - [解决办法](#解决办法)
     - [【报错2】：gyp ERR! configure error](#报错2gyp-err-configure-error)
-      - [问题原因：](#问题原因-1)
-      - [解决办法：](#解决办法-1)
+      - [问题原因](#问题原因-1)
+      - [解决办法](#解决办法-1)
   - [4、Ganache-CLI 安装](#4ganache-cli-安装)
   - [5、使用 truffle init 创建空白项目](#5使用-truffle-init-创建空白项目)
   - [6、使用 box 模板创建项目](#6使用-box-模板创建项目)
@@ -22,16 +22,23 @@
       - [1.1\> 配置文件](#11-配置文件)
       - [1.2\> 编译合约](#12-编译合约)
       - [1.3\> 部署合约](#13-部署合约)
-    - [2\> 若要连接以太坊 测试网、主网，需使用 truffle-hardware 提供器。](#2-若要连接以太坊-测试网主网需使用-truffle-hardware-提供器)
+    - [2\> 连接以太坊 测试网、主网](#2-若要连接以太坊-测试网主网需使用-truffle-hardware-提供器)
       - [2.1\> 配置文件](#21-配置文件)
   - [10、部署合约](#10部署合约)
     - [配置部署到网络](#配置部署到网络)
-  - [参考文献：](#参考文献)
+  - [参考文献](#参考文献)
 
+---------------
 
 **Truffle 官方网站** https://trufflesuite.com  
 **Truffle 模板** https://trufflesuite.com/boxes/  
 **学习教程** https://decert.me/tutorial/solidity/tools/truffle_ganache/    
+
+# 项目部署流程  
+1. 在本地的开发者网络（如：Ganache）进行部署，测试及验证代码逻辑的正确性
+2. 在测试网络（如：Goerli）进行灰度发布
+3. 一切 OK 后部署在主网（如： 以太坊主网）
+
 
 # 环境搭建  
 **ubantu** 环境下安装请下载查看 [以太坊安装私有链.docx](https://github.com/BruceCoins/Pizza369/blob/main/0x0000%20docs/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%89%E8%A3%85%E7%A7%81%E6%9C%89%E9%93%BE.docx)  
@@ -243,9 +250,9 @@ module.exports = {
 #### 1.2> 编译合约  
 启动 本地环境，3 种方法，任选其一即可：    
 
-1> 直接运行 ganache 客户端启动。需另开一个 cmd 窗口运行**编译**命令。（如图） 
-2> 开 cmd 窗口，使用命令行 `ganache-cli` 启动区块链环境。 需另开一个 cmd 窗口运行**编译**命令。（如图）  
-3> 开 cmd 窗口，使用命令行 `truffle develop` 启动 truffle 自带的区块链环境。需要在 **项目根目录下** 执行此命令行，然后直接运行 **编译、部署** 命令，无需另开一个 cmd 窗口。  
+1> 直接运行 ganache 客户端启动。需另开一个 cmd 窗口运行**编译**命令。（如图）   
+2> 开 cmd 窗口，使用命令行 `ganache-cli` 启动区块链环境。 需另开一个 cmd 窗口运行**编译**命令。（如图）    
+3> 开 cmd 窗口，使用命令行 `truffle develop` 启动 truffle 自带的区块链环境。需要在 **项目根目录下** 执行此命令行，然后直接运行 **编译、部署** 命令，无需另开一个 cmd 窗口。    
 
 ```cmd
 truffle compile
@@ -309,23 +316,29 @@ module.exports = {
     // 1> 以太测试网 Goerli    
     goerli: {
       provider: () => new HDWalletProvider(MNEMONIC,  GOERLI_INFURA_API_KEY),
-      network_id: 5,       // Goerli 网络id
+      network_id: 5       // Goerli 网络id
     },
 
     // 2> 以太测试网 Sepolia
     sepolia: {
-        provider: () => new HDWalletProvider(MNEMONIC, SEPOLIA_INFURA_API_KEY)
-        network_id: 5,       // Sepolia 网络id
+        provider: () => new HDWalletProvider(MNEMONIC, SEPOLIA_INFURA_API_KEY),
+        network_id: 5       // Sepolia 网络id
     }
 
     // 以太主网
     advanced: {
       provider: () => new HDWalletProvider(mnemonic, `https://mainnet.infura.io`),
       network_id: 1,       // Custom network
+    // gas                  - use gas and gasPrice if creating type 0 transactions
+    // gasPrice             - all gas values specified in wei
+    // maxFeePerGas         - use maxFeePerGas and maxPriorityFeePerGas if creating type 2 transactions (https://eips.ethereum.org/EIPS/eip-1559)
+    // maxPriorityFeePerGas 
+   
     }
   }
 };
 ```
+更详细的 `truffle-config.js`配置信息，请查看[Truffle 官方网络配置文档](https://trufflesuite.com/docs/truffle/reference/configuration/#networks)  和 [登链社区的Truffle配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
 对于每一个配置的网络，在未明确设置以下交易参数时，使用其默认值：
 ```
 gas：部署合约的gas上限，默认值：4712388  
@@ -335,24 +348,47 @@ provider：默认的web3 provider，使用host和port配置选项构造：new We
 websockets：需要启用此选项以使用确认监听器，或者使用.on或.once监听事件。默认值为false  
 ```
 
-## 10、部署合约  
-在部署合约前，还需要确定：
+#### 2.2> 编译合约  
+```cmd
+truffle compile
+```
 
-- 确定部署到哪一个网络， 这可以使用 `truffle-config.js` 来进行配置  
-- 确定如何部署合约，例如传递什么参数给合约，这需要我们编写部署脚本  
-之后就可以运行 `truffle migrate` 执行部署。
+#### 2.3> 部署合约    
 
-### 配置部署到网络  
-部署流程：
-1. 在本地的开发者网络（如：Ganache）进行部署，测试及验证代码逻辑的正确性
-2. 在测试网络（如：Goerli）进行灰度发布
-3. 一切 OK 后部署在主网（如： 以太坊主网）
+如果是真实的网络，如上的 goerli 网络，则需要提供提交交易账号的助记词 与 节点RPC URL （节点 URL 可以在 https://chainlist.org/ 获取）。
 
-`truffle-config.js` 中，使用 `networks` : 选项用来配置不同的网络。可以通过指定不同的网络配置，来连接不同的EVM网络。  
-[具体参数可参考此文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)  
+注意要在 Goerli 上进行部署，你需要将Goerli-ETH发送到将要进行部署的地址中。 可以从水龙头免费或一些测试币，这是Goerli的一个水龙头:
 
+[- Alchemy Goerli Faucet](https://goerlifaucet.com/)
 
+- 【1】直接部署到指定网络
+选择部署到配置文件`truffle-config.js`中设置的网络，如下部署到 ganache 中
+详细的参数信息，可参考 [truffle-migrate - 部署合约](http://cw.hubwiz.com/card/c/truffle-5-manual/1/1/14/)
+```javascript
+// truffle migrate --network <网络名称>
+truffle migrate --network ganache
+```
+- 【2】通过部署脚本进行部署
+编写部署脚本（也称迁移文件），放在 `migrations` 目录下，添加一个文件 **1_counter.js**:
+```javascript
+// 选择要运行的合约 "Counter"
+const Counter = artifacts.require("Counter");
 
+module.exports = function (deployer) {
+
+ deployer.deploy(Counter);
+
+};
+```
+（部署脚本的编写可参考相关 [中文文档](https://learnblockchain.cn/docs/truffle/getting-started/running-migrations.html))
+
+请注意，文件名以**数字序号**为前缀，后缀为描述。 编号前缀是必需的，是因为Truffle 按序号（从小到大）依次执行部署脚本，以便记录迁移是否成功运行，编号 还有记录 运行迁移文件顺序的作用。  
+```javascript
+// truffle migrate -f <数字序号> --network <网络名称> ,选择合约脚本（ 1_counter.js ）部署到指定网络（主网）中
+truffle migrate -f 1 --network advanced  
+```
+在进行部署时，会发起一笔 创建合约交易， 交易完成后，会在链上生成一个合约地址， 如下图就是创建合约交易的详情：  
+![合约脚本运行成功](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate_script.png)
 
 ---------------  
 ## 参考文献： 
@@ -364,3 +400,4 @@ websockets：需要启用此选项以使用确认监听器，或者使用.on或.
 [Truffle详细配置文件参数文档](https://trufflesuite.com/docs/truffle/reference/configuration/#networks)
 [truffle部署合约到以太坊主网上](https://www.jianshu.com/p/a11bcea09809)
 [truffle部署指定的合约到指定网络](https://blog.csdn.net/u013288190/article/details/123849688)
+[登链社区的Truffle配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html) 
