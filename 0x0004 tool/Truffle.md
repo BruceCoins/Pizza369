@@ -1,3 +1,34 @@
+
+- [环境搭建](#环境搭建)
+  - [1、Python 安装](#1python-安装)
+  - [2、Nodejs 安装](#2nodejs-安装)
+  - [3、Truffle 安装](#3truffle-安装)
+    - [【报错 1】：npm ERR! code ERR\_SOCKET\_TIMEOUT](#报错-1npm-err-code-err_socket_timeout)
+      - [问题原因：](#问题原因)
+      - [解决办法：](#解决办法)
+    - [【报错2】：gyp ERR! configure error](#报错2gyp-err-configure-error)
+      - [问题原因：](#问题原因-1)
+      - [解决办法：](#解决办法-1)
+  - [4、Ganache-CLI 安装](#4ganache-cli-安装)
+  - [5、使用 truffle init 创建空白项目](#5使用-truffle-init-创建空白项目)
+  - [6、使用 box 模板创建项目](#6使用-box-模板创建项目)
+    - [成功](#成功)
+    - [【报错 1】找不到truffle-box.json文件](#报错-1找不到truffle-boxjson文件)
+    - [【报错 2】connect ETIMEOUT](#报错-2connect-etimeout)
+    - [【报错 3】配置完 hosts 仍然报错 connect ETIMEOUT](#报错-3配置完-hosts-仍然报错-connect-etimeout)
+  - [7、编写合约](#7编写合约)
+  - [8、编译部署](#8编译部署)
+    - [1\> 只是在开发环境下进行简单测试](#1-只是在开发环境下进行简单测试)
+      - [1.1\> 配置文件](#11-配置文件)
+      - [1.2\> 编译合约](#12-编译合约)
+      - [1.3\> 部署合约](#13-部署合约)
+    - [2\> 若要连接以太坊 测试网、主网，需使用 truffle-hardware 提供器。](#2-若要连接以太坊-测试网主网需使用-truffle-hardware-提供器)
+      - [2.1\> 配置文件](#21-配置文件)
+  - [10、部署合约](#10部署合约)
+    - [配置部署到网络](#配置部署到网络)
+  - [参考文献：](#参考文献)
+
+
 **Truffle 官方网站** https://trufflesuite.com  
 **Truffle 模板** https://trufflesuite.com/boxes/  
 **学习教程** https://decert.me/tutorial/solidity/tools/truffle_ganache/    
