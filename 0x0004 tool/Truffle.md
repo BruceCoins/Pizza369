@@ -18,11 +18,11 @@
     - [【报错 3】配置完 hosts 仍然报错 connect ETIMEOUT](#报错-3配置完-hosts-仍然报错-connect-etimeout)
   - [7、编写合约](#7编写合约)
   - [8、编译部署](#8编译部署)
-    - [1\> 只是在开发环境下进行简单测试](#1-只是在开发环境下进行简单测试)
+    - [1\> 只部署在开发环境](#1-只部署在开发环境)
       - [1.1\> 配置文件](#11-配置文件)
       - [1.2\> 编译合约](#12-编译合约)
       - [1.3\> 部署合约](#13-部署合约)
-    - [2\> 若要连接以太坊 测试网、主网，需使用 truffle-hardware 提供器。](#2-若要连接以太坊-测试网主网需使用-truffle-hardware-提供器)
+    - [2\> 连接以太坊 测试网、主网](#2-连接以太坊 测试网、主网)
       - [2.1\> 配置文件](#21-配置文件)
       - [2.2\> 编译合约](#22-编译合约)
       - [2.3\> 部署合约](#23-部署合约)
@@ -235,7 +235,7 @@ contract Counter {
 `truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。  
 可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)    
 
-### 1> 只是在开发环境下进行简单测试  
+### 1> 只部署在开发环境  
 #### 1.1> 配置文件  
 只需简单配置, 使用 `solc` 配置编译器 solidity 版本信息：
 ```
@@ -271,7 +271,10 @@ truffle migrate
 ![部署成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate.png) 
 
 
-### 2> 若要连接以太坊 测试网、主网，需使用 truffle-hardware 提供器。  
+### 2> 连接以太坊 测试网、主网  
+- 需使用 truffle-hardware 提供器。
+- 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY 
+![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
 
 - 安装dotenv模块、hardware提供器  
 
