@@ -273,16 +273,21 @@ truffle migrate
 
 ### 2> 连接以太坊 测试网、主网  
 - 需使用 truffle-hardware 提供器。
-- 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY 
-![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
-
-- 安装dotenv模块、hardware提供器  
-
+- 安装dotenv模块、hardware提供器 
 ```cmd
 npm install dotenv --save
 npm install truffle-hdwallet-provider
 ```
-#### 2.1> 配置文件  
+
+#### 2.1> 获取API_KEY  
+- 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY 
+![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
+
+#### 2.2> 领取测试网 ETH  
+- 通过水龙头 [Chainlink Faucets](https://faucets.chain.link/) 获取测试网代币
+
+
+#### 2.3> 配置文件  
 - 在项目的根目录中创建一个名为 `.env` 的新文件（dotenv需要）并添加以下内容：  
 ```
 MNEMONIC = "<即钱包私钥或助记词>"
@@ -351,12 +356,12 @@ provider：默认的web3 provider，使用host和port配置选项构造：new We
 websockets：需要启用此选项以使用确认监听器，或者使用.on或.once监听事件。默认值为false  
 ```
 
-#### 2.2> 编译合约  
+#### 2.4> 编译合约  
 ```cmd
 truffle compile
 ```
 
-#### 2.3> 部署合约    
+#### 2.5> 部署合约    
 
 如果是真实的网络，如上的 goerli 网络，则需要提供提交交易账号的助记词 与 节点RPC URL （节点 URL 可以在 https://chainlist.org/ 获取）。
 
