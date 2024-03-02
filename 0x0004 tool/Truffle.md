@@ -23,8 +23,8 @@
       - [1.2\> 编译合约](#12-编译合约)
       - [1.3\> 部署合约](#13-部署合约)
     - [2\> 连接以太坊 测试网、主网](#2-连接以太坊-测试网主网)
-      - [2.1\> 获取API\_KEY](#21-获取api_key)
-      - [2.2\> 领取测试网 ETH](#22-领取测试网-eth)
+      - [2.1\> infura 获取API\_KEY](#21-infura-获取api_key)
+      - [2.2\> chainlink faucets 领取测试网 ETH](#22-chainlink-faucets-领取测试网-eth)
       - [2.3\> 配置文件](#23-配置文件)
       - [2.4\> 编译合约](#24-编译合约)
       - [2.5\> 部署合约](#25-部署合约)
@@ -282,11 +282,11 @@ npm install dotenv --save
 npm install truffle-hdwallet-provider
 ```
 
-#### 2.1> 获取API_KEY  
+#### 2.1> infura 获取API_KEY  
 - 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY 
 ![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
 
-#### 2.2> 领取测试网 ETH  
+#### 2.2> chainlink faucets 领取测试网 ETH  
 - 通过水龙头 [Chainlink Faucets](https://faucets.chain.link/) 获取测试网代币
 
 
@@ -437,8 +437,8 @@ truffle migrate -f 1 --network advanced
       - [1.2\> 编译合约](#12-编译合约)
       - [1.3\> 部署合约](#13-部署合约)
     - [2\> 连接以太坊 测试网、主网](#2-连接以太坊-测试网主网)
-      - [2.1\> 获取API\_KEY](#21-获取api_key)
-      - [2.2\> 领取测试网 ETH](#22-领取测试网-eth)
+      - [2.1\> infura 获取API\_KEY](#21-infura-获取api_key)
+      - [2.2\> chainlink faucets 领取测试网 ETH](#22-chainlink-faucets-领取测试网-eth)
       - [2.3\> 配置文件](#23-配置文件)
       - [2.4\> 编译合约](#24-编译合约)
       - [2.5\> 部署合约](#25-部署合约)
