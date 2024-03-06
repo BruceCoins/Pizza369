@@ -114,17 +114,19 @@ npm install -g ganache-cli
 ```cmd
 npm list -g 
 ```  
-- 启动ganache-cli  
+- 启动ganache-cli
+注意端口，在合约开发 `truffle-config.js` 配置环境变量时需要用到 
 ```cmd
 ganache-cli
 ```  
 ![启动ganache-cli](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_start.png)  
 
-至此环境安装完成，接下来通过使用 unbox 来创建 Truffle 项目   
 
 [下载 ganache 桌面客户端](https://trufflesuite.com/ganache/)  
 ![ganache客户端来了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli.png)
   
+至此环境安装完成，接下来通过使用 unbox 来创建 Truffle 项目   
+
 --------  
 
 ## 5、使用 truffle init 创建空白项目    
@@ -238,8 +240,27 @@ contract Counter {
 `truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。  
 可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)    
 
-### 1> 只部署在开发环境  
-#### 1.1> 配置文件  
+### 1> ganache的使用  
+#### 1.1> 方法一：使用 ganache-cli
+直接启动 ganache-cli，然后对合约进行编译、部署即可
+```
+ganache-cli
+``` 
+#### 1.2> 方法二：使用 ganache 桌面端
+- 启动 ganache 桌面端， 点击 “new workspace” ：  
+![newworkspace](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli_newspace.png)  
+- 配置参数并启动：  
+![配置参数](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli_newspace2.png)  
+- **注意端口号**、默认使用第一个用户账号地址：  
+![注意端口](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli_newspace3.png)  
+- 使用 `truffle migrate` 部署合约，注意 交易hash、合约地址、账号地址:  
+![部署合约](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli_newspace4.png)  
+- 与 ganache 桌面端数据进行比对，可以看到已经部署成功：  
+![比较ganache桌面数据](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/ganache_cli_newspace5.png)  
+
+
+### 2> 只部署在开发环境  
+#### 2.1> 配置文件  
 只需简单配置, 使用 `solc` 配置编译器 solidity 版本信息：
 ```
 module.exports = {
@@ -250,7 +271,7 @@ module.exports = {
     }
   }
 ```
-#### 1.2> 编译合约  
+#### 2.2> 编译合约  
 启动 本地环境，3 种方法，任选其一即可：    
 
 1> 直接运行 ganache 客户端启动。需另开一个 cmd 窗口运行**编译**命令。（如图）   
@@ -264,7 +285,7 @@ truffle compile
 
 ![编译成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_compile.png)  
 
-#### 1.3> 部署合约  
+#### 2.3> 部署合约  
 ```cmd
 truffle migrate
 ```
@@ -274,7 +295,7 @@ truffle migrate
 ![部署成功了](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate.png) 
 
 
-### 2> 连接以太坊 测试网、主网  
+### 3> 连接以太坊 测试网、主网  
 - 需使用 truffle-hardware 提供器。
 - 安装dotenv模块、hardware提供器 
 ```cmd
@@ -282,15 +303,15 @@ npm install dotenv --save
 npm install truffle-hdwallet-provider
 ```
 
-#### 2.1> infura 获取API_KEY  
+#### 3.1> infura 获取API_KEY  
 - 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY 
 ![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
 
-#### 2.2> chainlink faucets 领取测试网 ETH  
+#### 3.2> chainlink faucets 领取测试网 ETH  
 - 通过水龙头 [Chainlink Faucets](https://faucets.chain.link/) 获取测试网代币
 
 
-#### 2.3> 配置文件  
+#### 3.3> 配置文件  
 - 在项目的根目录中创建一个名为 `.env` 的新文件（dotenv需要）并添加以下内容：  
 ```
 MNEMONIC = "<即钱包私钥或助记词>"
@@ -359,12 +380,12 @@ provider：默认的web3 provider，使用host和port配置选项构造：new We
 websockets：需要启用此选项以使用确认监听器，或者使用.on或.once监听事件。默认值为false  
 ```
 
-#### 2.4> 编译合约  
+#### 3.4> 编译合约  
 ```cmd
 truffle compile
 ```
 
-#### 2.5> 部署合约    
+#### 3.5> 部署合约    
 
 如果是真实的网络，如上的 goerli 网络，则需要提供提交交易账号的助记词 与 节点RPC URL （节点 URL 可以在 https://chainlist.org/ 获取）。
 
@@ -400,6 +421,17 @@ truffle migrate -f 1 --network advanced
 ```
 在进行部署时，会发起一笔 创建合约交易， 交易完成后，会在链上生成一个合约地址， 如下图就是创建合约交易的详情：  
 ![合约脚本运行成功](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate_script.png)
+
+### 【报错 1】：hit an invalid opcode while deploying  
+执行 `truffle migrate` 命令进行部署时报错：
+![hit](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate_err1.png)  
+通过分析查资料了解到极有可能是 solc 版本问题导致，于是在 `truffle-config.js` 中进行了设置，降低了 `solc` 版本，有人降到 `0.5.1` 起作用。  
+![solc version](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate_err1_sol.png)   
+再次执行  `truffle migrate` 命令：  
+![truffle ganache1](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_ganache_1.png)  
+对照启动的 `ganache-cli` 可以看到成功了：   
+![truffle ganache2](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_ganache_2.png)
+
 
 ---------------  
 ## 参考文献： 
