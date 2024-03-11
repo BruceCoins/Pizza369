@@ -9,15 +9,46 @@
   2> 集成测试：测试合约间的交互，确保各部分代码组合起来也可以按期望的方式运行。  
   3> 系统测试：测试整个dapp（去中心化应用）或系统。
 
-  从测试方法上来说：  
-  使用 Solidity 编写测试用例是为例测试智能合约的内部行为。编写单元测试调用合约方法，检测智能合约函数的返回值以及状态变量的值；编写集成测试来检查智能合约直接的交互。  
+- 从测试方法上来说：  
+  使用 Solidity 编写测试用例是测试智能合约的内部行为。编写单元测试调用合约方法，检测智能合约函数的返回值以及状态变量的值；编写集成测试来检查智能合约直接的交互。  
   使用 JavaScript 编写测试用例是确保合约正确的外部行为。主要使用web3.js、 Mocha 和 Chai 断言 编写测试脚本。
 
  简单来说，Solidity 测试用例主要用于之恩那个合约内部实现逻辑的验证，可用于单元测试、集成测试；而 JavaScript 测试用例主要用于智能合约外部行为的验证，通常用于集成测试。  
 
-## 2、
-  
+## 2、示例项目  
+准备两个合约 `Background`和`EntryPoint`:   
+`Background` 是一个内部合约，DApp 前端不会直接和它交互。  
+`EntryPoint` 是设计为供 DApp交互的智能合约，在 `EntryPoint` 合约会引用 `Background` 合约。
 
+`Background.sol`合约代码如下：  
+```solidity
+//SPDX-License-Identifier: MIT
+pragma solidity >=0.5.0;
+
+contract Background {
+    uint[] private values;
+    // 存数据
+    function storeValue(uint value) public {
+        values.push(value);
+    }
+
+    // 获取指定数据
+    function getValue(uint initial) public view returns(uint) {
+        return values[initial];
+    }
+
+    // 获取数据长度
+    function getNumberOfValues() public view returns(uint) {
+        return values.length;
+    }
+}
+```
+`EntryPoint.sol`合约代码如下：
+```solidity
+//SPDX-License-Identifier: MIT
+
+
+```
 
 
 
