@@ -15,6 +15,8 @@
 
  简单来说，Solidity 测试用例主要用于之恩那个合约内部实现逻辑的验证，可用于单元测试、集成测试；而 JavaScript 测试用例主要用于智能合约外部行为的验证，通常用于集成测试。  
 
+> 测试代码放到 test 文件夹下，
+
 ## 2、示例项目  
 准备两个合约 `Background.sol`和`EntryPoint.sol`:   
 `Background` 是一个内部合约，DApp 前端不会直接和它交互。  
@@ -81,6 +83,90 @@ contract EntryPoint {
 ```
 由于 stroeTwoValues(uint, uint) 函数两次调用 Background 合约中的同一个函数，因此对这个函数进行单元测试比较困难。  
 getNumbersOfValues() 也同样如此，因此这两个函数更适合进行集成测试。
+
+## 3、用 Solidity 编写测试用例  
+### 3.1> 单元测试  
+【1】编写测试合约 TestBackground.sol，用来测试 Background.sol 合约，确保它：    
+- 在`values`数组中保存新的值
+- 按索引返回`values`
+- 在`values`数组中保存多个值
+- 返回`values`数组的大小
+
+具体代码如下：  
+```solidity
+//SPDX-Lincese-Identifier:MIT
+pragma solidity >=0.5.0;
+
+import "truffle/Assert.sol";
+import "truffle/DeployeAddress.sol";
+import "../../../contracts/Background.sol"
+
+contract TestBackground{
+    Background public background;
+
+    //在每一个函数运行前 先执行此函数
+    function beforeEach() public{
+        background = new Background();
+    }
+
+    //测试是否能正确存储一个值
+    function testItStoresOneValue() public{
+        uint value = 5;
+        background.storeValue(value);
+        uint result = background.getValue(0);
+        Assert.equal(result, value, "It should store the correct value");
+    }
+
+    //测试是否能正确获取 存储数据的数量
+    function testItGetCorrectNumberOfValues() public{
+        background.storeValue(99);
+        uint newSize = background.getNumberOfValues();
+        Assert.equal(newSize, 1, "It should increase the size");
+    }
+    //测试能否正存储多个值
+    function testItStoresMultipleValues() public{
+        for(uint8 i = 1; i < 10; i++){
+            uint value = i;
+            background.storeValue(value);
+            uint result = background.getValue(i);
+            Assert.equal(result, value, "It should store the correct value for multiple values");
+        }
+    }
+    
+}
+```
+【2】编写测试合约 TestEntryPoint.sol， 用来测试合约 EntryPoint.sol，验证合约功能是否符合预取，  
+
+具体代码如下：
+```
+//SPDX-License-Identifier:MIT
+pragma solidity >= 0.5.0;
+
+import "truffle/Assert.sol";
+import "truffle/DeployedAddress.sol";
+import "../../../contracts/Background.sol";
+import "../../../contracts/EntryPoint.sol";
+
+contract TestEntryPoint{
+    function testItHasCorrectBackground() public{
+        Background backgroundTest = new Background();
+        EntryPoint entryPoint = new EntryPoint(address(backgroundTest));
+        address expected = address(backgroundTest);
+        address target = entryPoint.getBackgroundAddress();
+        Assert.equal(target, expected, "It should set the correct background");
+    }
+}
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
