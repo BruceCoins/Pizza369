@@ -16,7 +16,7 @@
  简单来说，Solidity 测试用例主要用于之恩那个合约内部实现逻辑的验证，可用于单元测试、集成测试；而 JavaScript 测试用例主要用于智能合约外部行为的验证，通常用于集成测试。  
 
 ## 2、示例项目  
-准备两个合约 `Background`和`EntryPoint`:   
+准备两个合约 `Background.sol`和`EntryPoint.sol`:   
 `Background` 是一个内部合约，DApp 前端不会直接和它交互。  
 `EntryPoint` 是设计为供 DApp交互的智能合约，在 `EntryPoint` 合约会引用 `Background` 合约。
 
@@ -26,7 +26,9 @@
 pragma solidity >=0.5.0;
 
 contract Background {
+
     uint[] private values;
+
     // 存数据
     function storeValue(uint value) public {
         values.push(value);
@@ -37,7 +39,7 @@ contract Background {
         return values[initial];
     }
 
-    // 获取数据长度
+    // 获取数据数量
     function getNumberOfValues() public view returns(uint) {
         return values.length;
     }
@@ -46,9 +48,39 @@ contract Background {
 `EntryPoint.sol`合约代码如下：
 ```solidity
 //SPDX-License-Identifier: MIT
+pragma solidity >=0.5.0;
 
+import "./Background.sol";
 
+contract EntryPoint {
+
+    //存放合约地址的变量
+    address public backgroundAddress;
+
+    //构造函数：注入 Background.sol 合约部署的地址，赋值给 backgroundAddress
+    constructor(address _background) public {
+        backgroundAddress = _background;
+    }
+
+    //返回 Background.sol 合约部署地址
+    function getBackgroundAddress() public view reurns(address){
+        return backgroundAddress;
+    }
+
+    //保存两个数据 
+    function storeTwoValues(uint first, uint second) public {
+        Background(backgroundAddress).storeValue(first);
+        Background(backgroundAddress).sotreValue(second);
+    }
+    
+    //获取存放数据的数量
+    function getNumbersOfValues() public view return(uint) {
+        return Background(backgroundAddress).getNumberOfValues();
+    }
+}
 ```
+由于 stroeTwoValues(uint, uint) 函数两次调用 Background 合约中的同一个函数，因此对这个函数进行单元测试比较困难。  
+getNumbersOfValues() 也同样如此，因此这两个函数更适合进行集成测试。
 
 
 
