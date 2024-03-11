@@ -57,12 +57,12 @@ contract EntryPoint {
     //存放合约地址的变量
     address public backgroundAddress;
 
-    //构造函数：注入 Background.sol 合约部署的地址，赋值给 backgroundAddress
+    //构造函数：传入 Background.sol 合约部署的地址，赋值给 backgroundAddress
     constructor(address _background) public {
         backgroundAddress = _background;
     }
 
-    //返回 Background.sol 合约部署地址
+    //返回地址，此处为 Background.sol 合约的部署地址
     function getBackgroundAddress() public view reurns(address){
         return backgroundAddress;
     }
