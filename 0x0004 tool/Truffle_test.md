@@ -15,12 +15,16 @@
 
  简单来说，Solidity 测试用例主要用于之恩那个合约内部实现逻辑的验证，可用于单元测试、集成测试；而 JavaScript 测试用例主要用于智能合约外部行为的验证，通常用于集成测试。  
 
-> 测试代码放到 test 文件夹下，
+> 所有测试文件都将位于 ./test 目录下。Truffle 只会运行具有以下文件扩展名的测试文件：`.js`、`.ts`、`.es`、`.es6`、`.jsx` 和 `.sol` ，所有其他文件都将被忽略。
 
 ## 2、示例项目  
+[项目完整代码](https://github.com/alexroan/truffle-tests-tutorial)可在 GitHub上查看，尽管时间有些久远，但很有代表性，值得学习。  
+
 准备两个合约 `Background.sol`和`EntryPoint.sol`:   
-`Background` 是一个内部合约，DApp 前端不会直接和它交互。  
+`Background` 是一个内部合约，DApp 前端不会直接和它交互，**因此后边进行集成测试时需要通过字类进行测试**。  
 `EntryPoint` 是设计为供 DApp交互的智能合约，在 `EntryPoint` 合约会引用 `Background` 合约。
+
+分别使用 `Solidity`和`JavaScript` 编写测试用例进行测试。
 
 `Background.sol`合约代码如下：  
 ```solidity
@@ -98,7 +102,7 @@ getNumbersOfValues() 也同样如此，因此这两个函数更适合进行集�
 pragma solidity >=0.5.0;
 
 import "truffle/Assert.sol";
-import "truffle/DeployeAddress.sol";
+import "truffle/DeployeAddresses.sol";
 import "../../../contracts/Background.sol"
 
 contract TestBackground{
@@ -135,15 +139,15 @@ contract TestBackground{
     
 }
 ```
-【2】编写测试合约 TestEntryPoint.sol， 用来测试合约 EntryPoint.sol，验证合约功能是否符合预取，  
+【2】编写测试合约 TestEntryPoint.sol， 用来测试 EntryPoint.sol合约，验证注入的依赖是否符合预取，  
 
 具体代码如下：
-```
+```solidity
 //SPDX-License-Identifier:MIT
 pragma solidity >= 0.5.0;
 
 import "truffle/Assert.sol";
-import "truffle/DeployedAddress.sol";
+import "truffle/DeployedAddresses.sol";
 import "../../../contracts/Background.sol";
 import "../../../contracts/EntryPoint.sol";
 
@@ -154,6 +158,61 @@ contract TestEntryPoint{
         address expected = address(backgroundTest);
         address target = entryPoint.getBackgroundAddress();
         Assert.equal(target, expected, "It should set the correct background");
+    }
+}
+```
+### 3.2> 集成测试  
+如前所述，`EntryPoint.sol` 合约中的其他函数需要与 `Background.sol` 合约交互，因此我们没有办法单独测试这些函数，需要在集成测试中进行验证。  
+
+代码如下：
+```solidity
+//SPDX-License-Identifier:MIT
+pragma solidity >=0.5.0;
+
+import ”truffle/Assert.sol“;
+import "truffle/DeployedAddresses";
+import "../../../contracts/Background.sol";
+import "../../../contracts/EntryPoint.sol";
+
+contract TestIntegrationEntryPoint{
+    BackgroundTest public backgroundTest;
+    EntryPoint public entryPoint;
+
+    //运行每一个函数前都 先执行此函数
+    function beforeEach() public{
+        backgroundTest = new BackgroundTest();
+        entryPoint = new EntryPoint(address(backgroundTest));
+    }
+
+    //检查 EntryPoint 合约中 storeTwoValues() 函数是否工作正常
+    //由于 EntryPoint 合约调用了 background.storeValue()
+    //所以 模拟扩展合约 BackgroundTest.sol 来检查集成是否有效
+    function testItStoresTwoValues() public {
+        uint value1 = 5;
+        uint value2 = 20;
+        entryPoint.storeTwoValues(value1,value2);
+        uint result1 = backgroundTest.values(0);
+        uint result2 = backgroundTest.values(1);
+        Assert.equal(result, value1, "Value 1 should be correct");
+        Assert.equal(result, value2, "Value 2 should be correct"); 
+    }
+
+    // 检查入口点是否正确调用了模拟扩展合约
+    // 表明合约之间的集成正在运行
+    
+
+    // 模拟扩展合约
+    // 因为实际情况 Background.sol 是私有的，不能直接调用
+    // 通过子类进行测试   
+    contract BackgroundTest is Background{
+        uint[] public values;
+        function storeValue(uint value) public{
+            values.push(value);
+        }
+
+        function getNumberOfValues() public view returns(uint){
+            return 999;
+        }
     }
 }
 
@@ -169,7 +228,7 @@ contract TestEntryPoint{
 
 
 
-
 --------------------
 ## 参考资料：  
+[如何测试以太坊智能合约](https://betterprogramming.pub/how-to-test-ethereum-smart-contracts-35abc8fa199d)
 [实战以太坊智能合约测试【Truffle】](https://developer.aliyun.com/article/751576)
