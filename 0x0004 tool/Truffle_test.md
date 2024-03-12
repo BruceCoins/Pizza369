@@ -21,7 +21,7 @@
 [项目完整代码](https://github.com/alexroan/truffle-tests-tutorial)可在 GitHub上查看，尽管时间有些久远，但很有代表性，值得学习。  
 
 准备两个合约 `Background.sol`和`EntryPoint.sol`:   
-`Background` 是一个内部合约，DApp 前端不会直接和它交互，**因此后边进行集成测试时需要通过字类进行测试**。  
+`Background` 是一个 **内部合约**，DApp 前端不会直接和它交互，**因此后边集成测试时需要通过子合约进行测试**。  
 `EntryPoint` 是设计为供 DApp交互的智能合约，在 `EntryPoint` 合约会引用 `Background` 合约。
 
 分别使用 `Solidity`和`JavaScript` 编写测试用例进行测试。
@@ -199,7 +199,10 @@ contract TestIntegrationEntryPoint{
 
     // 检查入口点是否正确调用了模拟扩展合约
     // 表明合约之间的集成正在运行
-    
+    function testItCallGetNumberOfValuesFromBackground() public{
+        uint result = entryPoint.getNumberOfValues();
+        Assert.equal(result, 999, "It should call getNumberOfValues");
+    }    
 
     // 模拟扩展合约
     // 因为实际情况 Background.sol 是私有的，不能直接调用
@@ -209,7 +212,7 @@ contract TestIntegrationEntryPoint{
         function storeValue(uint value) public{
             values.push(value);
         }
-
+        
         function getNumberOfValues() public view returns(uint){
             return 999;
         }
