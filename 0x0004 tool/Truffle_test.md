@@ -218,13 +218,37 @@ contract TestIntegrationEntryPoint{
         }
     }
 }
-
 ```
+通过使用模拟扩展合约 BackgroundTest，来检查 EntryPoint 是否调用了部署在 backgroundAddress 地址处的合约的正确函数。
 
+## 4、用 JavaScript 编写测试用例  
+用 JavaScript 编写集成测试来确保合约的外部行为满足预期要求，这样可更好的开发 DApp。  
 
+### 4.1> 集成测试  
+针对 EntryPoint.sol 编写测试文件 entryPoint.test.js :
+```javascript
+const EntryPoint = artifacts.require("./EntryPoint.sol");
 
+require('chai')
+    .use(require('chai-as-promised'))
+    .should();
 
+conrtact("EntryPoint", accounts => {
+    describe("Storing Values", () => {
+        it("Stores correctly", async() => {
+            const entryPoing = await EntryPoint.depiloyed();
 
+            let numberOfValues = await entryPoing.getNumberOfValues();
+            numberOfValues.toString().should.equal("0");
+
+            await entryPoing.storeTwoValues(2,4);
+            numberOfValues = await entryPoint.getNumberOfValues();
+            numberOfValues.toString().should.equal("2");
+        });
+    });
+});
+```  
+使用 EntryPoint 合约中的函数，JavaScript 测试可以确保我们将区块链外部的值利用交易传入智能合约中， 这是通过调用合约的 storeTwoValues(uint, uint) 函数来实现。
 
 
 
