@@ -19,9 +19,23 @@
 
 
 ## 2、JavaScript 测试（Mocha + Chai）   
-[Mocha 中文官网](https://mocha.nodejs.cn/) | [Chai 官网](https://www.chaijs.com/)
-### 
+[Mocha 测试框架 中文官网](https://mocha.nodejs.cn/) | [Chai 断言库 官网](https://www.chaijs.com/)  
+Mocha 是现在最流行的 JavaScript 测试框架（JavaScript test framework）之一，通常与 Chai 断言库搭配使用。  
+### 2.1> 安装  
+- 安装 Mocha 测试框架  
+```cmd
+$ npm install mocha --save-dev
+```
+也可以全局安装，但是不推荐  
+```cmd
+$ npm install -g mocha
+```
+- 安装 Chai 断言库
+```cmd
+$ npm install chai --save-dev
+```
 
 
 ## 参考文献  
+[mocha入门教程](https://matmanjs.github.io/test-automation-training/unit-testing-with-mocha/mocha.html)
 [mocha测试框架-truffle ](https://www.cnblogs.com/wanghui-garcia/p/9503810.html)
