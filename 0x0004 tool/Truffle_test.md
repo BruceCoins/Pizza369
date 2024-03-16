@@ -249,11 +249,6 @@ conrtact("EntryPoint", accounts => {
 ```  
 使用 EntryPoint 合约中的函数，JavaScript 测试可以确保我们将区块链外部的值利用交易传入智能合约中， 这是通过调用合约的 storeTwoValues(uint, uint) 函数来实现。
 
-
-
-
-
-
 --------------------
 ## 参考资料：  
 [如何测试以太坊智能合约](https://betterprogramming.pub/how-to-test-ethereum-smart-contracts-35abc8fa199d)
