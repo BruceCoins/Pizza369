@@ -235,6 +235,11 @@ contract TestIntegrationEntryPoint{
 用 JavaScript 编写集成测试来确保合约的外部行为满足预期要求，这样可更好的开发 DApp。  
 
 ### 4.1> 集成测试  
+Truffle 使用 Mocha 测试框架 和 Chai 断言来给你提供一个可靠的框架编写JavaScript测试。
+  
+- Truffle 无法检测出在测试中需要与哪些合约进行交互，所以您需要明确地指出这些合约。可以使用一个由Truffle提供的方法 `artifacts.require()` 来做这些事情,它可以为一个特定的合约，请求一个可用的合约抽象。
+- chai 断言有三种，expect(), assert() 和 should()，expect和should都是BDD的风格，与Mocha默认使用BDD风格一致。
+
 针对 EntryPoint.sol 编写测试文件 entryPoint.test.js :
 ```javascript
 const EntryPoint = artifacts.require("./EntryPoint.sol");
