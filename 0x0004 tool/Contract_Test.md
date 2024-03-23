@@ -68,8 +68,8 @@ $ npx mocha add.test.js
 
 **Truffle使用 Mocha 和 Chai 进行测试**  
 
-使用Truffle框架开发智能合约进行测试时，需要注意到的一个很大的不同是它使用了 **`contract()`** 测试套件替代了 **`describe()`** 测试套件，这个函数基本和 describe() 一样，只不过它可以启用clean-room 功能.  其过程如下:  
-- 每次`contract()`函数运行之前，合约会被重新部署到正在运行的以太坊客户端，因此测试是在一个干净的合约环境下进行的。  
+使用Truffle框架开发智能合约进行测试时，需要注意到的一个很大的不同是它使用了 **`contract()`** 测试套件替代了Mocha的 **`describe()`** 测试套件，这个函数基本和 describe() 一样，只不过它可以启用 `clean-room` 功能.  其过程如下:  
+- 每次`contract()`函数运行之前，合约会被**重新部署**到正在运行的以太坊客户端，因此测试是在一个干净的合约环境下进行的。  
 - 这个`contract()`函数提供一个由以太坊客户端生成的，可以在编写测试合约使用的账户列表。
 
 比如：  
@@ -78,7 +78,8 @@ contract('CryptoPunksMarket-setInitial', function (accounts) {});
 ```
 在这里accounts就是会返回在区块链环境上的所有用户的账户来让测试使用  
    
-> 如果您不需要一个清洁的测试环境，那么仍然可以使用describe()函数来运行普通的Mocha测试。  
+> 如果您不需要一个清洁的测试环境，那么仍然可以使用`describe()`函数来运行普通的Mocha测试。
+> Truffle 本身也已经将断言库 Chai 也包装了进去，所以当想使用断言，如assert时，可以直接使用`require('chai').assert`，不用导入 Mocha 模块， 
 
 ### 2.3> Chai 断言库
 
