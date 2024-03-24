@@ -16,7 +16,19 @@
 两种方式各有其特点，我们通常选择的是BDD的方式。  
 
 ## 1、Solidity 测试  
+- 如果使用 Remix IDE 编写合约，可借助插件`Solidity Uint Testing`生成测试文件。可参考 [Remix单元测试插件](https://remix-ide.readthedocs.io/zh-cn/latest/unittesting.html)   
+- 如果使用其他 IDE 编写合约，也可手动编写测试文件。   
 
+编写 .sol  测试文件，可以使用一些特殊函数，可参考 [简单测试示例](https://remix-ide.readthedocs.io/zh-cn/latest/unittesting_examples.html)：  
+```solidity
+beforeEach() //在每次测试之前运行
+
+beforeAll()  //在所有测试之前运行
+
+afterEach()  //在每次测试之后运行
+
+afterAll()   //在所有测试之后运行
+```
 
 ## 2、JavaScript 测试（Mocha + Chai）   
 [Mocha 测试框架 中文官网](https://mocha.nodejs.cn/) | [Chai 断言库 官网](https://www.chaijs.com/)  
