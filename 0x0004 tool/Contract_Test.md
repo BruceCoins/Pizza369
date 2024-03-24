@@ -19,7 +19,8 @@
 - 如果使用 Remix IDE 编写合约，可借助插件`Solidity Uint Testing`生成测试文件。可参考 [Remix单元测试插件](https://remix-ide.readthedocs.io/zh-cn/latest/unittesting.html)   
 - 如果使用其他 IDE 编写合约，也可手动编写测试文件。   
 
-编写 .sol  测试文件，可以使用一些特殊函数，可参考 [简单测试示例](https://remix-ide.readthedocs.io/zh-cn/latest/unittesting_examples.html)：  
+编写 .sol  测试文件，可以使用一些特殊函数，他们会在指定时间执行，可参考 [简单测试示例](https://remix-ide.readthedocs.io/zh-cn/latest/unittesting_examples.html)：    
+
 ```solidity
 beforeEach() //在每次测试之前运行
 
@@ -29,6 +30,10 @@ afterEach()  //在每次测试之后运行
 
 afterAll()   //在所有测试之后运行
 ```
+
+> [!TIP]
+>
+> 使用 Mocha 进行 JavaScript 的测试用例编写时，也有 [相似的函数](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/Contract_Test.md#24-mocha-%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6) ，注意区别。
 
 ## 2、JavaScript 测试（Mocha + Chai）   
 [Mocha 测试框架 中文官网](https://mocha.nodejs.cn/) | [Chai 断言库 官网](https://www.chaijs.com/)  
@@ -168,6 +173,11 @@ describe('hooks', function() {
   // test cases
 });
 ```
+> [!TIP]
+>
+> 使用 Solidity 编写测试用例时，也有 [相似的函数](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/Contract_Test.md#1solidity-%E6%B5%8B%E8%AF%95) ，注意区别。
+
+
 
 
 ## 参考文献  
