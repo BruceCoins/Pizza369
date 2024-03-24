@@ -83,7 +83,7 @@ contract('CryptoPunksMarket-setInitial', function (accounts) {});
 
 所有测试脚本放在 /test 文件夹下，可在控制台运行以下命令来执行测试脚本：
 ```
-truffle test
+$ truffle test
 ```
 
 ### 2.3> Chai 断言库  
@@ -120,9 +120,45 @@ foo.should.equal('bar');
 ```
 - 推荐使用 except 断言，其更接近自然语言，其语法规则详情请 [查看except断言api](https://www.chaijs.com/api/bdd/) 
 
+### 2.4> Mocha 测试框架  
+若只使用 Mocha 运行测试脚本，进入到测试脚本（如 add.test.js）所在的目录，然后执行：  
+```shell  
+$ mocha add.test.js
+```
+若有多个文件，则使用空格隔开。  
+
+- 使用通配符  
+```shell
+$ mocha spec/{add,reduce}.js  // 执行目录spec下的add.js和reduce.js文件
+$ mocha test/unit/*.js        // 执行 test/uint 目录下所有文件
+```
+- 测试用例钩子  
+Mocha在describe块之中，提供测试用例的四个钩子：`before()`、`after()`、`beforeEach()` 和 `afterEach()` 。它们会在指定时间执行。
+```javascript
+describe('hooks', function() {
+
+  before(function() {
+    // 在所有测试用例之前执行，比如在之前插入数据等等操作。
+  });
+
+  after(function() {
+    // 在所有测试用例之后执行，用于清理测试环境，回滚到清空数据状态。
+  });
+
+  beforeEach(function() {
+    // 在每个测试用例之前执行，可用于测试测试需要准备相关数据的条件。
+  });
+
+  afterEach(function() {
+    // 在每个测试用例之后执行，可用于准备测试用例所需的后置条件
+  });
+
+  // test cases
+});
+```
 
 
 ## 参考文献  
-[mocha入门教程](https://matmanjs.github.io/test-automation-training/unit-testing-with-mocha/mocha.html)
-[mocha测试框架-truffle ](https://www.cnblogs.com/wanghui-garcia/p/9503810.html)
-[测试框架 Mocha 实例教程](https://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
+[mocha入门教程](https://matmanjs.github.io/test-automation-training/unit-testing-with-mocha/mocha.html)  
+[mocha测试框架-truffle ](https://www.cnblogs.com/wanghui-garcia/p/9503810.html)  
+[阮一峰 测试框架 Mocha 实例教程](https://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
