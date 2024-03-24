@@ -51,7 +51,7 @@ var expext = require("chai")
 
 describe('加法函数测试'，function(){
     it (' 1 + 1 = 2', function(){
-        except(add(1,1)).ro.be.equale(2);
+        except(add(1,1)).to.be.equale(2);
     });
 });
 ```
@@ -66,7 +66,7 @@ $ npx mocha add.test.js
 - 3> **`it`** 块称为"测试用例"（test case），表示一个单独的测试，是测试的最小单位。它也是一个函数，第一个参数是测试用例的名称（"1 加 1 应该等于 2"），第二个参数是一个实际执行的函数。一个 it 块里面包含一个或多个 断言
 - 4> **`断言`** 就是判断源码的实际执行结果与预期结果是否一致，如果不一致就抛出一个错误。测试脚本中 `except(add(1,1)).ro.be.equale(2)`即为断言，意思是调用add(1, 1)，结果应该等于2。
 
-**Truffle使用 Mocha 和 Chai 进行测试**  
+**Truffle框架使用 Mocha 和 Chai 进行测试**  
 
 使用Truffle框架开发智能合约进行测试时，需要注意到的一个很大的不同是它使用了 **`contract()`** 测试套件替代了Mocha的 **`describe()`** 测试套件，这个函数基本和 describe() 一样，只不过它可以启用 `clean-room` 功能.  其过程如下:  
 - 每次`contract()`函数运行之前，合约会被**重新部署**到正在运行的以太坊客户端，因此测试是在一个干净的合约环境下进行的。  
@@ -79,9 +79,48 @@ contract('CryptoPunksMarket-setInitial', function (accounts) {});
 在这里accounts就是会返回在区块链环境上的所有用户的账户来让测试使用  
    
 > 如果您不需要一个清洁的测试环境，那么仍然可以使用`describe()`函数来运行普通的Mocha测试。
-> Truffle 本身也已经将断言库 Chai 也包装了进去，所以当想使用断言，如assert时，可以直接使用`require('chai').assert`，不用导入 Mocha 模块， 
+> Truffle 本身也已经将断言库 Chai 也包装了进去，所以当想使用断言，如assert时，可以直接使用`require('chai').assert`，不用导入 Mocha 模块。
 
-### 2.3> Chai 断言库
+所有测试脚本放在 /test 文件夹下，可在控制台运行以下命令来执行测试脚本：
+```
+truffle test
+```
+
+### 2.3> Chai 断言库  
+[Chai 官网 API](https://www.chaijs.com/api/)   
+
+在简单示例中有一句断言：
+```
+except(add(1,1)).to.be.equale(2);
+```
+上面这句断言的意思是，调用add(1, 1)，结果应该等于2。  
+
+**断言库** 可以理解为比较函数，也就是断言函数是否和预期一致，如果一致则表示测试通过，如果不一致表示测试失败。  
+**Chai 断言库** 包括expect, assert 和 should 三种断言，其中 expect 和 should 都是BDD的风格。   
+
+三种断言使用方法：  
+assert 用法:  
+```javascript
+var assert = require('chai').assert;
+var foo = 'bar';
+assert.equal(foo, 'bar', 'foo  equal `bar`')
+```
+
+except 用法 ( **推荐使用** ) ：  
+```javascript
+var except = require('chai').except;
+except(4+5).to.be.equal(9);
+```
+
+should 用法：  
+```javascript
+var should = require('chai').should();
+var foo = 'bar';
+foo.should.equal('bar');
+```
+- 推荐使用 except 断言，其更接近自然语言，其语法规则详情请 [查看except断言api](https://www.chaijs.com/api/bdd/) 
+
+
 
 ## 参考文献  
 [mocha入门教程](https://matmanjs.github.io/test-automation-training/unit-testing-with-mocha/mocha.html)
