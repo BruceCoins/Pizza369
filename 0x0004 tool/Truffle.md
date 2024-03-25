@@ -244,7 +244,7 @@ contract Counter {
 
 # 4、编译部署  
 `truffle-config.js` 用于 Truffle 框架项目配置，在这个文件中，你可以指定编译器、网络、账户和合约的路径等各种配置。  
-可参考 [参数配置文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)    
+查看 [4.3.3> 配置文件](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/Truffle.md#433-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6) 部分，也可参考 [Truffle配置文件中文文档](https://learnblockchain.cn/docs/truffle/reference/configuration.html)    
 
 ## 4.1> ganache的使用  
 ### 4.1.1> 方法一：使用 ganache-cli
