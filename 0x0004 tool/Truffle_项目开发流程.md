@@ -318,7 +318,7 @@ npm install truffle-hdwallet-provider
 ```
 
 ### 4.3.1> infura 获取API_KEY  
-- 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY
+- 节点供应商 [infura](https://www.infura.io/):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY
 
 ![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
 
