@@ -438,7 +438,10 @@ truffle migrate -f 1 --network advanced
 
 可在区块链浏览器中通过 `transaction hash` 查看具体信息：  
 塞波利亚测试网浏览器：[https://sepolia.etherscan.io/](https://sepolia.etherscan.io/)  
-以太坊主网浏览器：[https://etherscan.io/](https://etherscan.io/)
+以太坊主网浏览器：[https://etherscan.io/](https://etherscan.io/)  
+
+根据交易hash，在 sepolia 浏览器中查看部署详情：  
+![在sepolia中查看](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate_script2.png)
 
 ### 【报错 1】：hit an invalid opcode while deploying  
 执行 `truffle migrate` 命令进行部署时报错：
