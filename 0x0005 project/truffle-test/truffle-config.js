@@ -41,10 +41,10 @@
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
-// require('dotenv').config();
-// const { MNEMONIC, PROJECT_ID } = process.env;
+ require('dotenv').config();
+ const { MNEMONIC, SEPOLIA_INFURA_API_KEY } = process.env;
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+ const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
   /**
@@ -67,7 +67,7 @@ module.exports = {
     development: {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 7545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
+     network_id: "*"        // Any network (default: none)
     },
     //
     // An additional network, but with some advanced options…
@@ -89,6 +89,14 @@ module.exports = {
     //   timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     //   skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
+       sepolia: {
+           provider: () => new HDWalletProvider(MNEMONIC, SEPOLIA_INFURA_API_KEY),
+           network_id: 11155111,       // Goerli's id
+           confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
+           timeoutBlocks: 10000,  // # of blocks before a deployment times out  (minimum/default: 50)
+           skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+       },
+
     //
     // Useful for private networks
     // private: {
@@ -116,7 +124,7 @@ module.exports = {
       //  evmVersion: "byzantium"
       // }
     }
-  },
+  }
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be
