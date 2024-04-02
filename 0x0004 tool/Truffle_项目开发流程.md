@@ -318,7 +318,7 @@ npm install truffle-hdwallet-provider
 ```
 
 ### 4.3.1> infura 获取API_KEY  
-- 节点供应商 [infura](infura.io):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY
+- 节点供应商 [infura](https://www.infura.io/):免费注册申请获得连接到 测试网、主网 的 API_KEY，参数配置在  `.env` 文件中的 INFURA_API_KEY
 
 ![节点api-key](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/infura_2.png)
 
@@ -331,7 +331,7 @@ npm install truffle-hdwallet-provider
 ```
 MNEMONIC = "<即钱包私钥或助记词>"
 SEPOLIA_INFURA_API_KEY = "https://sepolia.infura.io/v3/<Your-API-Key>"
-GOERLI_INFURA_API_KEY = "https://sepolia.infura.io/v3/<Your-API-Key>"
+GOERLI_INFURA_API_KEY = "https://goerli.infura.io/v3/<Your-API-Key>"
 
 ```
 
@@ -339,7 +339,7 @@ GOERLI_INFURA_API_KEY = "https://sepolia.infura.io/v3/<Your-API-Key>"
 ```javascript
 require('dotenv').config();
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-const { MNEMONIC, SEPOLIA_INFURA_API_KEY,  } = process.env;
+const { MNEMONIC, SEPOLIA_INFURA_API_KEY, GOERLI_INFURA_API_KEY } = process.env;
 
 module.exports = {
   networks: {
@@ -369,7 +369,7 @@ module.exports = {
     // 2> 以太测试网 Sepolia
     sepolia: {
         provider: () => new HDWalletProvider(MNEMONIC, SEPOLIA_INFURA_API_KEY),
-        network_id: 5       // Sepolia 网络id
+        network_id: 11155111       // Sepolia 网络id
     }
 
     // 以太主网
@@ -435,6 +435,10 @@ truffle migrate -f 1 --network advanced
 在进行部署时，会发起一笔 创建合约交易， 交易完成后，会在链上生成一个合约地址， 如下图就是创建合约交易的详情：  
 
 ![合约脚本运行成功](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/images/truffle_migrate_script.png)
+
+可在区块链浏览器中通过 `transaction hash` 查看具体信息：  
+塞波利亚测试网浏览器：[https://sepolia.etherscan.io/](https://sepolia.etherscan.io/)  
+以太坊主网浏览器：[https://etherscan.io/](https://etherscan.io/)
 
 ### 【报错 1】：hit an invalid opcode while deploying  
 执行 `truffle migrate` 命令进行部署时报错：
