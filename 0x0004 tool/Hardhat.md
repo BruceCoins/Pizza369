@@ -51,8 +51,10 @@ $ npm init -y
 $ npm install --save-dev hardhat
 $ npm install --save-dev @nomicfoundation/hardhat-toolbox
 ```
+> [!CAUTION]
+> 使用 hardhat 命令时，以 **npx** 开头
 
-创建示例项目，使用 **`npx`**：  
+创建示例项目：  
 ```
 $ npx hardhat init
 ```
@@ -80,7 +82,7 @@ $ npx hardhat init
 分别创建文件夹`contracts`、`scripts`、`test`分别用来存放 智能合约、部署脚本、测试脚本。  
 
 ## 2.3> 编写合约  
-编写一个简单加减法合约 Calculator.sol
+在 `contracts` 文件夹下编写一个简单加减法合约 Calculator.sol
 ```solidity
 // SPDX-License-Identifier : MIT
 
@@ -97,6 +99,13 @@ contract Calculator{
     }
 }
 ```
+## 2.4> 编译合约  
+```
+$ npx hardhat compile
+```
+成功后返回信息：`Compiled 1 Solidity file successfully.`  
+
+## 2.5> 测试合约  
 
 
 # 参考文献
