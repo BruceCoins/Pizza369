@@ -112,24 +112,25 @@ except(add(1,1)).to.be.equale(2);
 ```
 上面这句断言的意思是，调用add(1, 1)，结果应该等于2。  
 
-**断言库** 可以理解为比较函数，也就是断言函数是否和预期一致，如果一致则表示测试通过，如果不一致表示测试失败。  
-**Chai 断言库** 包括expect, assert 和 should 三种断言，其中 expect 和 should 都是BDD的风格。   
+**断言库** 可以理解为比较函数，也就是断言函数是否和预期一致，如果一致则表示测试通过，如果不一致表示测试失败。
+
+**Chai 断言库** 包括`expect`, `assert` 和 `should` 三种断言，其中 expect 和 should 都是BDD的风格。   
 
 三种断言使用方法：  
-assert 用法:  
+**`assert 用法`**:  
 ```javascript
 var assert = require('chai').assert;
 var foo = 'bar';
 assert.equal(foo, 'bar', 'foo  equal `bar`')
 ```
 
-except 用法 ( **推荐使用** ) ：  
+**`except 用法` ( 推荐使用 )** ：  
 ```javascript
 var except = require('chai').except;
 except(4+5).to.be.equal(9);
 ```
 
-should 用法：  
+**`should 用法`**：  
 ```javascript
 var should = require('chai').should();
 var foo = 'bar';
