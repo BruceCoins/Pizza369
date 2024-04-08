@@ -98,13 +98,20 @@ require("@nomicfoundation/hardhat-toolbox");
 
 pragma solidity ^0.8.0;
 
+//引入console库合约，打印日志
+import "hardhat/console.sol";
+
 //简单计算器 加减法
 contract Calculator{
     function add(uint256 a, uint256 b ) public pure returns(uint256){
-        return a+b;
+        uint256 c = a + b;
+        console.log("a=%s, b=%s, a+b=%s ", a, b, c);
+        return c;
     }
 
     function sub(uint256 a, uint256 b) public pure returns(uint256){
+        uint256 c = a - b;
+        console.log("a=%s, b=%s, a+b=%s ", a, b, c);
         return a-b;
     }
 }
@@ -119,8 +126,63 @@ Compiled 1 Solidity file successfully.
 
 ```
 
-## 2.6> 测试合约   
-- 编写测试脚本
+## 2.6> 部署合约   
+- **编写部署脚本**  
+在 script 文件夹中创建 deploy.js 自动部署脚本：  
+```javascript
+const { ethers } = require("hardhat");
+
+// 定义一个异步函数 main，用于部署智能合约
+async function main() {
+    // 获取部署者 的 以太坊账户信息
+    const [deployer] = await ethers.getSigners();
+    // 打印部署者的以太坊地址
+    console.log('Deploying contract address: ${deployer.address}');
+
+    // 获取智能合约工厂
+    const Calculator = await ethers.getContractFactory("Calculator");
+    // 部署智能合约
+    const calculator = await Calculator.deploy();
+    // 打印合约地址
+    console.log('Calculator deployed to : ${calculator.address}');
+
+    main().then(() => process.exit(0))
+        .catch((error) => {
+            console.error(error);
+            process.exit(1);
+        });
+}
+```
+
+- **运行部署脚本**
+
+```
+$ npx hardhat run script/deploy.js
+```
+----------------部署成功-----------------
+```
+Deploying contract address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Calculator deployed to : 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
+```
+
+> [!TIP]
+> 若在 `hardhat.config.js` 中配置多个网络环境，可以选择指定网络进行部署。
+```
+$ npx hardhat run .\script\deploy.js network <network name>
+```
+----------如 部署到本地 localhost -------------
+```
+$ npx hardhat run .\script\deploy.js network localhost
+```
+
+- **启动 hardhat 节点**  
+如有需要，可启动 Hardhat 内置的 Hardhat Network 本地以太坊网络，是一个为开发而设计的，启动该本地测试网络服务后，还会生成一系列测试用账户，默认使用第一个。
+```
+$ npx hardhat node
+```
+
+## 2.7> 测试合约   
+- **编写测试脚本**
 
 使用 Mocha 测试框架、chai 断言库，详请查看 [智能合约测试](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/Contract_Test.md) 内容。    
 在 `test` 文件夹下创建测试脚本文件 Calculator.test.js :
@@ -163,18 +225,20 @@ describe("Calculator contract", async function () {
 });
 ```
 
-- 运行测试脚本
+- **运行测试脚本**
 ```
 $ npx hardhat test
-
-//---------------测试通过---------------------
+```
+---------------测试通过-----------------
+```
 Calculator contract
-    ✔ should add two numbers correctly (1274ms)
-    ✔ should subtract two numbers correctly (58ms)
+a=5, b=3, a+b=8 
+    ✔ should add two numbers correctly (1240ms)
+a=10, b=4, a+b=6 
+    ✔ should subtract two numbers correctly (71ms)
 2 passing (1s)
 ```
 
-## 部署合约
 
 # 参考文献
 [hardhat 官网](https://hardhat.org/hardhat-runner/docs/getting-started)
