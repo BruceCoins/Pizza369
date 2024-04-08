@@ -242,3 +242,6 @@ a=10, b=4, a+b=6
 
 # 参考文献
 [hardhat 官网](https://hardhat.org/hardhat-runner/docs/getting-started)
+[20分钟极速学完Hardhat全部内容](https://learnblockchain.cn/article/6187)
+[基于 Solidity、Hardhat、OpenZeppelin 迈向 Web3.0](http://www.uinio.com/Web/Solidity/)
+[ethers.js 文档](https://docs.ethers.org/v6/)
