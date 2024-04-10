@@ -86,12 +86,12 @@ $ npx hardhat init
 
 
 ## 2.3> 编写配置文件   
-- 【1】安装 dotenv 配置密钥信息，执行以下命令，并在项目根目录下创建 `.env`文件，
+- 【1】安装 dotenv 配置密钥要发布到网络的 API-KEY 信息，执行以下命令，并在项目根目录下创建 `.env`文件，
 ```shell
 $ npm install dotenv
 ```
 
-- `.env` 文件内容包括 个人私钥、要发布到网络的 API-KEY：
+- `.env` 文件内容包括 个人私钥、要发布到网络的 API-KEY，此文件应添加到 `.gitignore` 中来避免私钥泄露：
 ```
 # your private key 私钥
 PRIVATEKEY="4685**************************73ba133a8eb"
