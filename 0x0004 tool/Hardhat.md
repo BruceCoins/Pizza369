@@ -85,10 +85,35 @@ $ npx hardhat init
   
 
 
-## 2.3> 编写配置文件  
-在上一步中引入了 hardhat 插件 `hardhat-toolbox` ，需要将它添加到配置文件 **hardhat.config.js** 中，直接在文件最顶部添加:  
+## 2.3> 编写配置文件   
+- 【1】安装 dotenv 配置密钥信息，执行以下命令，并在项目根目录下创建 `.env`文件，
+```shell
+$ npm install dotenv
+```
+
+- `.env` 文件内容包括 个人私钥、要发布到网络的 API-KEY：
+```
+# your private key 私钥
+PRIVATEKEY="4685**************************73ba133a8eb"
+
+# infura节点服务器获取的 sepolia 测试网访问地址
+SEPOLIA_INFURA_API_KEY = "https://sepolia.infura.io/v3/447ec****************d27a558"
+```
+
+- 【2】 将 hardhat 插件 `hardhat-toolbox` 和 `dotenv` 添加到配置文件 **hardhat.config.js** 中；
 ```javascript
 require("@nomicfoundation/hardhat-toolbox");
+require('dotenv').config;
+
+module.exports = {
+  solidity: "0.8.24",
+  networks: {
+    sepolia: {
+      url: process.env.SEPOLIA_INFURA_API_KEY,
+      accounts: [process.env.PRIVATEKEY],
+    }  
+  }
+};
 ```
 
 ## 2.4> 编写合约  
@@ -126,62 +151,7 @@ Compiled 1 Solidity file successfully.
 
 ```
 
-## 2.6> 部署合约   
-- **编写部署脚本**  
-在 script 文件夹中创建 deploy.js 自动部署脚本：  
-```javascript
-const { ethers } = require("hardhat");
-
-// 定义一个异步函数 main，用于部署智能合约
-async function main() {
-    // 获取部署者 的 以太坊账户信息
-    const [deployer] = await ethers.getSigners();
-    // 打印部署者的以太坊地址
-    console.log('Deploying contract address: ${deployer.address}');
-
-    // 获取智能合约工厂
-    const Calculator = await ethers.getContractFactory("Calculator");
-    // 部署智能合约
-    const calculator = await Calculator.deploy();
-    // 打印合约地址
-    console.log('Calculator deployed to : ${calculator.address}');
-
-    main().then(() => process.exit(0))
-        .catch((error) => {
-            console.error(error);
-            process.exit(1);
-        });
-}
-```
-
-- **运行部署脚本**
-
-```
-$ npx hardhat run script/deploy.js
-```
-----------------部署成功-----------------
-```
-Deploying contract address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-Calculator deployed to : 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
-```
-
-> [!TIP]
-> 若在 `hardhat.config.js` 中配置多个网络环境，可以选择指定网络进行部署。
-```
-$ npx hardhat run .\script\deploy.js network <network name>
-```
-----------如 部署到本地 localhost -------------
-```
-$ npx hardhat run .\script\deploy.js network localhost
-```
-
-- **启动 hardhat 节点**  
-如有需要，可启动 Hardhat 内置的 Hardhat Network 本地以太坊网络，是一个为开发而设计的，启动该本地测试网络服务后，还会生成一系列测试用账户，默认使用第一个。
-```
-$ npx hardhat node
-```
-
-## 2.7> 测试合约   
+## 2.6> 测试合约   
 - **编写测试脚本**
 
 使用 Mocha 测试框架、chai 断言库，详请查看 [智能合约测试](https://github.com/BruceCoins/Pizza369/blob/main/0x0004%20tool/Contract_Test.md) 内容。    
@@ -238,6 +208,63 @@ a=10, b=4, a+b=6
     ✔ should subtract two numbers correctly (71ms)
 2 passing (1s)
 ```
+
+## 2.7> 部署合约   
+- **编写部署脚本**  
+在 script 文件夹中创建 deploy.js 自动部署脚本：  
+```javascript
+const { ethers } = require("hardhat");
+
+// 定义一个异步函数 main，用于部署智能合约
+async function main() {
+    // 获取部署者 的 以太坊账户信息
+    const [deployer] = await ethers.getSigners();
+    // 打印部署者的以太坊地址
+    console.log('Deploying contract address: ${deployer.address}');
+
+    // 获取智能合约工厂
+    const Calculator = await ethers.getContractFactory("Calculator");
+    // 部署智能合约
+    const calculator = await Calculator.deploy();
+    // 打印合约地址
+    console.log('Calculator deployed to : ${calculator.address}');
+
+    main().then(() => process.exit(0))
+        .catch((error) => {
+            console.error(error);
+            process.exit(1);
+        });
+}
+```
+
+- **运行部署脚本**
+
+```
+$ npx hardhat run script/deploy.js
+```
+----------------部署成功-----------------
+```
+Deploying contract address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Calculator deployed to : 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
+```
+
+> [!TIP]
+> 若在 `hardhat.config.js` 中配置多个网络环境，可以选择指定网络进行部署。
+```
+$ npx hardhat run .\script\deploy.js network <network name>
+```
+----------如 部署到本地 localhost -------------
+```
+$ npx hardhat run .\script\deploy.js network localhost
+```
+
+- **启动 hardhat 节点**  
+如有需要，可启动 Hardhat 内置的 Hardhat Network 本地以太坊网络，是一个为开发而设计的，启动该本地测试网络服务后，还会生成一系列测试用账户，默认使用第一个。
+```
+$ npx hardhat node
+```
+
+
 
 
 # 参考文献
