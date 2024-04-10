@@ -11,11 +11,14 @@
   - [2.7\> 部署合约](#27-部署合约)
 - [参考文献](#参考文献)
 
+------------------
 
+> [!TIP]
+> 此文档对应项目 [hardhat-test](https://github.com/BruceCoins/Pizza369/tree/main/0x0005%20project/hardhat-test)
 
 # 1、环境搭建   
 
-系统：win10
+系统：win10  
 
 ## 1.1> Nodejs、npm 安装  
 需要 Nodejs >= 16.0 版本，安装nodejs的同时，npm也会被安装。   
@@ -48,7 +51,7 @@ $ npm init -y
 ## 2.2> 创建 hardhat 项目
 在 hardhat-test 文件夹中执行以下命令：  
 - 引入 hardhat 依赖。  
-- 安装 [hardhat-toolbox](https://hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-toolbox) 插件，该插件包含了使用hardhat开发的常用软件包。
+- 安装 [hardhat-toolbox](https://hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-toolbox) 插件，该插件包含了使用hardhat开发的常用软件包，根目录产生 `node_modules` 文件夹。
 ```
 $ npm install --save-dev hardhat
 $ npm install --save-dev @nomicfoundation/hardhat-toolbox
