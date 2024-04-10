@@ -1,0 +1,3 @@
+# 配置上传到github时应忽略的文件、文件夹
+*.env
+node_modules/
