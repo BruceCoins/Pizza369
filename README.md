@@ -1,2 +1,4 @@
-## Records Blockchain knowledge，code analysis, technology development
-## 记录 区块链相关知识、源码分析、技术开发
+# 成功的秘诀：无他，唯手熟尔
+
+
+## 记录 区块链学习过程、源码分析、技术开发 以及 其他相关知识
