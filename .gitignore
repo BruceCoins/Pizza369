@@ -1,0 +1,2 @@
+# 配置不上传到 github 的文件
+*.vscode 
