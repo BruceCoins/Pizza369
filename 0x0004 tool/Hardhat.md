@@ -133,6 +133,8 @@ module.exports = {
   }
 };
 ```
+- 只有一个accounts 时，不用使用 `[ ]`
+
 
 ## 2.4> 编写合约  
 在 `contracts` 文件夹下编写一个简单加减法合约 Calculator.sol
