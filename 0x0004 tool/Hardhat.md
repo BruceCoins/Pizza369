@@ -240,7 +240,7 @@ async function main() {
     // 获取部署者 的 以太坊账户信息
     const [deployer] = await ethers.getSigners();
     // 打印部署者的以太坊地址
-    console.log('Deploying contract address:',deployer.address);
+    console.log('Deploying contract address:: ${deployer.address)');
 
     // 获取智能合约工厂
     const Calculator = await ethers.getContractFactory("Calculator");
