@@ -15,7 +15,7 @@
 --> 连接钱包 "Connect Wallet"  
 --> 创建订阅 "Create Subscription"，邮箱、项目名选填，钱包确认  
 --> 转入代币 "Fund Subscription" ，选择资产、金额，此处使用 Link  
---> 添加用户 ”Add Consumer“，消费者地址即钱包地址，**Subscription ID（订阅ID号） 非常重要，使用 VRF 时用到** ，
+--> 添加用户 ”Add Consumer“，消费者地址即智能合约地址，**Subscription ID（订阅ID号） 非常重要，使用 VRF 时用到** ，
     若忘记可在具体某条 **订阅的详情中查看 ID**
 
 
