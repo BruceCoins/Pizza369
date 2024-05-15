@@ -246,15 +246,16 @@ async function main() {
     const Calculator = await ethers.getContractFactory("Calculator");
     // 部署智能合约，若初始化需要传参数，就写在 depoly("参数") 中
     const calculator = await Calculator.deploy();
-    // 打印合约地址
+    // 打印合约地址 address 不可用时，使用target
     console.log('Calculator deployed to : ${calculator.address}');
-
-    main().then(() => process.exit(0))
-        .catch((error) => {
-            console.error(error);
-            process.exit(1);
-        });
 }
+
+main()
+   .then(() => process.exit(0))
+   .catch((error) => {
+       console.error(error);
+       process.exit(1);
+   });
 ```
 
 - **运行部署脚本**
@@ -271,11 +272,11 @@ Calculator deployed to : 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
 > [!TIP]
 > 若在 `hardhat.config.js` 中配置多个网络环境，可以选择指定网络进行部署。
 ```
-$ npx hardhat run .\script\deploy.js network <network name>
+$ npx hardhat run .\script\deploy.js --network <network name>
 ```
 ----------如 部署到本地 localhost -------------
 ```
-$ npx hardhat run .\script\deploy.js network localhost
+$ npx hardhat run .\script\deploy.js --network localhost
 ```
 
 - **启动 hardhat 节点**  
