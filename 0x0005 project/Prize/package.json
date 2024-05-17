@@ -1,0 +1,24 @@
+{
+  "name": "prize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.6",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2",
+    "@openzeppelin/hardhat-upgrades": "^3.1.0",
+    "@openzeppelin/upgrades-core": "^1.33.1",
+    "hardhat": "^2.22.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
