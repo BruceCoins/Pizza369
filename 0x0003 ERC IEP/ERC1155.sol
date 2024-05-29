@@ -10,6 +10,8 @@ import {IERC165} from "../../utils/introspection/IERC165.sol";
 // 源码详解： 多代币标准
 // https://learnblockchain.cn/article/4509
 // https://blog.csdn.net/cljdsc/article/details/125171775
+// 以阿迪达斯 NFT 为例进行解析：
+// https://jason.mirror.xyz/u48TgOxJykeEkJ4hMJxOrSYeKf7Q0mnFKReMtGMn6HY
 //
 //---------------------------------------------------------------
 
