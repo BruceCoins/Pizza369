@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 contract Doodles is ERC721, ERC721Enumerable, Ownable {
     // 出处
     string public PROVENANCE;
-    // 销售状态
+    // 发售状态
     bool public saleIsActive = false;
     // url扩展
     string private _baseURIextended;
@@ -82,10 +82,12 @@ contract Doodles is ERC721, ERC721Enumerable, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
+    // 设置 NFT 的 URL 地址
     function setBaseURI(string memory baseURI_) external onlyOwner() {
         _baseURIextended = baseURI_;
     }
 
+    // 获取 URL
     function _baseURI() internal view virtual override returns (string memory) {
         return _baseURIextended;
     }
@@ -94,6 +96,7 @@ contract Doodles is ERC721, ERC721Enumerable, Ownable {
         PROVENANCE = provenance;
     }
 
+    // 无需付费的 mint 
     function reserve(uint256 n) public onlyOwner {
       uint supply = totalSupply();
       uint i;
@@ -102,22 +105,25 @@ contract Doodles is ERC721, ERC721Enumerable, Ownable {
       }
     }
 
+    // 设置发售状态
     function setSaleState(bool newState) public onlyOwner {
         saleIsActive = newState;
     }
 
+    // 正式 mint 
     function mint(uint numberOfTokens) public payable {
         uint256 ts = totalSupply();
         require(saleIsActive, "Sale must be active to mint tokens");
         require(numberOfTokens <= MAX_PUBLIC_MINT, "Exceeded max token purchase");
         require(ts + numberOfTokens <= MAX_SUPPLY, "Purchase would exceed max tokens");
         require(PRICE_PER_TOKEN * numberOfTokens <= msg.value, "Ether value sent is not correct");
-
+        
         for (uint256 i = 0; i < numberOfTokens; i++) {
             _safeMint(msg.sender, ts + i);
         }
     }
 
+    // 提款
     function withdraw() public onlyOwner {
         uint balance = address(this).balance;
         payable(msg.sender).transfer(balance);
