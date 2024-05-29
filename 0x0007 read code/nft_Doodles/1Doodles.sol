@@ -1,77 +1,46 @@
 // SPDX-License-Identifier: MIT
-/*
-+ + + - - - - - - - - - - - - - - - - - - - - - - - - - - - ++ - - - - - - - - - - - - - - - - - - - - - - - - - - + + +
-+                                                                                                                      +
-+                                                                                                                      +
-.                                                                                                                      .
-.                                                    ####-                                                             .
-.                                        :*##:   .###-...:##                                                           .
-.                                        +#.:# :#+:........+#####+                                                     .
-.                                       .:#..#*=.................:#.                                                   .
-.                                     .#..*:.........:.........=-.-#                                                   .
-.                                      :+#-....:+**+^^+***__=**#:.*#                                                   .
-.                                      .#:.....:#              ^#.#                                                    .
-.                                      #:....-#^                 #                                                     .
-.                                      #-.....#    ++             +   ++                                               .
-.                                      .#.....+   +##+            .* +##+                                              .
-.                                       #.....#    ++  .######**.  #  ++                                               .
-.                                       #*  ^#^       *####--  ##. #                                                   .
-.                                      #:  #.         *####--  #*  #                                                   .
-.                                      #.   # :.       .###--  -# .+                                                   .
-.                                       #.   .#          ###--  # #                                                    .
-.                                        ^##^  #       .###--  =# *                                                    .
-.                                            #**#.     ###--  -*+**#                                                   .
-.                                            #***####**###--  +#****#                                                  .
-.                                           .##*********###--  #**##.                                                  .
-.                                          #************###--  #*****#                                                 .
-.                    ..:..                #*****#*******###--  #**#****###* *###                                       .
-.               .####*^^^^*###.          ##*****#******###--  #***#***#  :# #  :#                                      .
-.              :*             =#.        #******#*******##--  #***#***#  .# #  .#                 .####.               .
-.               ++#   ######.   #-  .*#####*****#*########--  #***#####  .# #  .#   .#######.   #*^   .^#+             .
-.                +#   #::::..#   #.#^^      ^#**#^       ^#- #**#^       .# #  .# +#^       ^# #+        #+            .
-.                .#   #      #   ##    .##.  .##.   .##.   # *#   .##.   .# #  .##.   -+#+.  # #   :######:            .
-.                .#   #     .#   #    #:::#   #.   #:::#   ###   #::::#  .# #  .##  :#####+  #.##     :...             .
-.                .#   #    .#.  :#   #   .#  .#   #    #   ##    #^   #  .# #  .##  .^     .##. *#+:.    .#            .
-.                .#   #####^    ##   #  :#.  .#   #  .#    ##    #   #.  .# #  .##   .=*######..##+###.   .#           .
-.                .#   ..      .###.   ###   .%#.   ###    *#-#    ###     # #  .##*   .      ####   ^     .#           .
-.                 #.   ..:-#####* #.      .*#  ##.      .##. :#._     _### ##.  #**#.     .:##. ##.     -##            .
-.                  ############*   =########    :########-     +#######^ ### ##### ^######++#^   ^#######+             .
-.                    ^*######*^      ^*##*^       ^*##*^         ^*###*^ ^##^ ^###^  ^*####*^      ^*##*^              .
-+                                                                                                                      +
-+                                                                                                                      +
-+ + + - - - - - - - - - - - - - - - - - - - - - - - - - - - ++ - - - - - - - - - - - - - - - - - - - - - - - - - - + + +
-*/
+
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
+// 合约继承 ERC721、ERC721Enumerable, Ownable
 contract Doodles is ERC721, ERC721Enumerable, Ownable {
+    // 出处
     string public PROVENANCE;
+    // 销售状态
     bool public saleIsActive = false;
+    // url扩展
     string private _baseURIextended;
 
+    // mint状态、供应量、mint数量、价格
     bool public isAllowListActive = false;
     uint256 public constant MAX_SUPPLY = 10000;
     uint256 public constant MAX_PUBLIC_MINT = 5;
     uint256 public constant PRICE_PER_TOKEN = 0.123 ether;
 
+    // 白名单
     mapping(address => uint8) private _allowList;
 
+    // 发币 符合721标准
     constructor() ERC721("Doodles", "DOODLE") {
     }
 
+    // 设置白单是否开始mint
     function setIsAllowListActive(bool _isAllowListActive) external onlyOwner {
         isAllowListActive = _isAllowListActive;
     }
 
+    // 写入白单可以 mint 的数量
     function setAllowList(address[] calldata addresses, uint8 numAllowedToMint) external onlyOwner {
         for (uint256 i = 0; i < addresses.length; i++) {
             _allowList[addresses[i]] = numAllowedToMint;
         }
     }
 
+    // 根据地址获取可以mint 的数量
     function numAvailableToMint(address addr) external view returns (uint8) {
         return _allowList[addr];
     }
