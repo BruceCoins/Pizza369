@@ -47,6 +47,7 @@ contract Doodles is ERC721, ERC721Enumerable, Ownable {
 
     // 白单 mint 函数    
     function mintAllowList(uint8 numberOfTokens) external payable {
+        // ts : 获取已mint的数量，也是token最大编号，默认值0
         // 校验：是否开始mint、
         //      用户实际mint数量 <= 地址允许mint的数量、
         //      已mint数量 + 即将mint的数量 <= 最大供应量
@@ -60,12 +61,19 @@ contract Doodles is ERC721, ERC721Enumerable, Ownable {
         // 记录用户可以mint的剩余数量 
         _allowList[msg.sender] -= numberOfTokens;
         
-        // 进行 mint 操作，记录mint 用户地址，token 编号
+        // 进行 mint 操作，记录mint 用户地址，按顺序记录token 编号
         for (uint256 i = 0; i < numberOfTokens; i++) {
             _safeMint(msg.sender, ts + i);
         }
     }
 
+    /** 
+     * NFT转让、mint、销毁函数：
+     *   (1)若from、to 都不是 0 地址，则转让 nft
+     *   (2)若from 是 0 地址，则是铸造函数
+     *   (3)若 to  是 0 地址，则为销毁函数
+     * 具体逻辑看 ERC721Enumerable.sol 文件相关函数
+     */
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
