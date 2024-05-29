@@ -45,14 +45,22 @@ contract Doodles is ERC721, ERC721Enumerable, Ownable {
         return _allowList[addr];
     }
 
+    // 白单 mint 函数    
     function mintAllowList(uint8 numberOfTokens) external payable {
+        // 校验：是否开始mint、
+        //      用户实际mint数量 <= 地址允许mint的数量、
+        //      已mint数量 + 即将mint的数量 <= 最大供应量
+        //      用户钱包金额应 不少于 mint需要的总金额
         uint256 ts = totalSupply();
         require(isAllowListActive, "Allow list is not active");
         require(numberOfTokens <= _allowList[msg.sender], "Exceeded max available to purchase");
         require(ts + numberOfTokens <= MAX_SUPPLY, "Purchase would exceed max tokens");
         require(PRICE_PER_TOKEN * numberOfTokens <= msg.value, "Ether value sent is not correct");
 
+        // 记录用户可以mint的剩余数量 
         _allowList[msg.sender] -= numberOfTokens;
+        
+        // 进行 mint 操作，记录mint 用户地址，token 编号
         for (uint256 i = 0; i < numberOfTokens; i++) {
             _safeMint(msg.sender, ts + i);
         }
