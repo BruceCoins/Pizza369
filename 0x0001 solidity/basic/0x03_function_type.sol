@@ -16,7 +16,38 @@ pragma solidity ^0.8.0;
 
 -   函数的唯一性由函数名和参数组成：即可以存在多个同名函数，参数类型或数量不同即可。
 */
+contract FunctinTypes{
+    //状态变量
+    uint256 public number = 5; 
 
+    //默认函数，对 状态变量 进行操作
+    function add() external{
+        number = number + 1;
+    }
+
+    /** pure ：
+            作用于 状态变量
+            不能读取、写入链上的状态变量
+    */
+
+    // 如果 默认函数被 pure 修饰 【function add() external pure{ number = number + 1; } 】将报错，因为pure不能对状态变量进行读、写操作
+    // 如果 改成 对局部变量 的操作 是可以的：
+    function add2(uint256 number_2) external pure returns(uint256){
+        return number_2 + 1;
+    }
+
+
+    /** view：
+            作用于 状态变量
+            不能写入，只能读取链上的状态变量
+    */
+    // 如果 默认函数被 view 修饰 【function add() external view{ number = number + 1 } 】将报错，因为 view 不能对 状态变量 进行写操作，只能读取
+    // 如果 默认函数没有参数、但是有返回值，则可以：
+    function add3() external view returns(uint256){
+        return number + 1;
+    }
+
+}
 contract Example{
     bytes4 public add_selector;
     event receiveEther(uint);
