@@ -46,7 +46,26 @@ contract FunctinTypes{
     function add3() external view returns(uint256){
         return number + 1;
     }
+    /** internal: 只允许合约内部调用
+        external: 只允许外部合约调用
+    */
+    function minus() internal{
+        number = number - 1;
+    }
+    
+    //外部合约 可以通过 minusCall() 调用内部合约 minus()
+    function minusCall() external{
+        minus();   
+    }
 
+    /**
+        payable: 允许支付eth
+    */
+    //间接调用 minus() 方法，返回合约剩余金额
+    function minusPayable() external payable returns(uint256 balance){
+        minus();
+        balance = address(this).balance;
+    }
 }
 contract Example{
     bytes4 public add_selector;
