@@ -17,7 +17,57 @@ pragma solidity ^0.8.0;
 */
 
 contract LearnBase{
-    
+     //固定长度数组
+    uint[8] array1;
+    bytes1[2] array2;
+
+    //可变长度数组
+    uint[] array3;
+    bytes1[] array4;  
+    bytes array5;   //bytes是数组，不加 [] 
+
+    // 对于 memory 修饰的 动态数组，可以使用 new 来创建，但必须声明长度，且长度不能改变
+    // solidity 0.8 以后的版本，不再使用 memory ，可以直接通过 new 来创建 
+    uint[]  array6 = new uint[](5);
+    bytes  array7 = new bytes(9);
+
+    function ArrayPush() public returns(uint[] memory){
+        uint[2] memory a = [uint(1),2];
+        array3 = a;
+        array3.push();
+        array3.push(3);
+        return array3;
+    }
+
+    //----------结构体 struct-----------
+    struct Student{
+        uint256 id;
+        uint256 grade;
+    }
+    Student public student;
+
+    // 赋值方式 1：创建 storage 引用来赋值
+    function initStudent() external{
+        Student storage stu = student;
+        stu.id = 12;
+        stu.grade = 99;
+    } 
+
+    // 赋值方式 2：直接使用 student
+    function initstudent2() external{
+        student.id = 22;
+        student.grade = 100;
+    }
+
+    //赋值方式 3：构造函数方式
+    function initStudent3() external{
+        student = Student(15, 80);
+    }
+
+    //赋值方式 4：key value
+    function initStudent4() external{
+        student = Student({id:6,grade:60});
+    }
 }
 
 contract LearnRefType{
