@@ -5,9 +5,9 @@ pragma solidity ^0.8.0;
 @引用类型
 - 介绍
     值类型在传递时总是复制，有一定内存开销。一些较大较复杂的类型只适合传递引用，所以需要引用类型。有如下几种引用类型：
-    -   struct
+    -   struct(结构体)
     -   不定长数组（所以定长数组是值类型，如uint[2]）
-    -   mapping
+    -   mapping（映射）
     引用类型声明时需要标识其存储的位置，可以是:
     -   memory：临时存储，离开执行环境则释放
     -   storage：合约存在期间持续存储
@@ -15,6 +15,10 @@ pragma solidity ^0.8.0;
     引用类型在赋值时，如果改变了数据存储位置，则发生复制！
     特殊类型：bytes和string，这两个类型在声明时也需要标识位置，本质上是因为它们都是 byte[] 构成的
 */
+
+contract LearnBase{
+    
+}
 
 contract LearnRefType{
     // 1. 这个区域的变量都是存在storage，不能指定位置
