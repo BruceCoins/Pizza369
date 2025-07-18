@@ -91,17 +91,19 @@ fn for_example(){
     }
 }
 
-// _ 代替元素
-fn for_example(){ 
-    let mut cc = 1;
-    for _ in (1..5).rev(){
-        println!("cc = {cc}");
-        cc += 1;
+// 循环3次，每次 x 都是10
+fn for_example2(){
+    let a = [10;3];  //定义数组，3个10
+    let mut sum = 0;
+    for x in a{
+        println!("x = {x}");
+        sum += x;
     }
+    print!("sum = {sum}");
 }
 
-// 循环指定次数 [1,5) 即4次,同时输出[1,5) 
-// rev()方法为倒序输出
+// 遍历 [1,5) 即4次,同时输出 1，2，3，4 
+// rev()方法为倒序输出，即 4，3，2，1
 fn for_example3(){
     for number in (1..5).rev(){
         println!({number});
@@ -109,14 +111,23 @@ fn for_example3(){
     println!("END!");
 }
 
-// 循环3次，每次 x 都是10
-fn for_example5(){
-    let a = [10;3];
-    let mut sum = 0;
-    for x in a{
-        println!("x = {x}");
-        sum += x;
+// 循环时元素不使用，’_‘ 代替元素，遍历[1,5)，循环4次
+fn for_example4(){ 
+    let mut cc = 1;
+    for _ in 1..5{
+        println!("cc = {cc}");
+        cc += 1;
     }
-    print!("sum = {sum}");
+}
+
+//循环时元素不使用，用 ‘_‘代替，则只是循环数组长度的次数
+fn for_example5(){
+    let mut dd = 1;
+    let a = [10,20,30,40,50,60];
+    //循环6次
+    for _ in a{
+        println!("the shuzu is {dd}");
+        dd += 1;
+    }
 }
 ```
