@@ -92,12 +92,11 @@ fn for_example(){
 }
 
 // _ 代替元素
-fn for_example2(){
-    let a = [10,20,30,40,50,60];
-    let cc = 0;
-    for _ in a{
-        
-        print
+fn for_example(){ 
+    let mut cc = 1;
+    for _ in (1..5).rev(){
+        println!("cc = {cc}");
+        cc += 1;
     }
 }
 
