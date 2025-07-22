@@ -138,41 +138,89 @@ fn for_example5(){
 - 数据大时，编译或运行时，数据可能发生变化必须放在Heep中。stack栈内存中存放指针地址指向Heep堆内存，数据实际位置在Heep堆内存中。  
 
 #### 【1】拥有 Copy strait 属性的类型：可以直接赋值 b = a，要求a、b是如下同类型   
-所有整型、bool、char、所有浮点型、Tuple(元组)要求其所有字段都是前面的类型    
+```rust   
+    所有整型、bool、char、所有浮点型、Tuple(元组)要求其所有字段都是前面的类型   
+```   
   
-#### 【2】使用 Box 的集合（Heep操作）：不能直接赋值 b = a 操作，否则 a 的值将不可用，要求a、b是如下同类型    
-Vec、String、HashMap...   
+#### 【2】使用 Box 的集合（Heep操作）：不能直接赋值 b = a 操作，否则 a 的值将不再可用，要求a、b是如下同类型    
+```rust
+    Vec、String、HashMap...
+```    
 **Box 内存释放原则**：如果一个变量拥有一个 box ，当 Rust 释放该变量的 stack frame 时，Rust 同时释放该 box 的堆内存（Heep）  
 
+- 移动堆（Heep）数据原则   
+``如果变量 x 将堆（Heep）数据的所有权移动给另一个变量 y，那么在移动后，x 将不能在使用``
+
+
+----------固定大小，数据小，存放在stack 中----------
 ```rust
-//固定大小，数据小，存放在stack 中
-fun num(){
+fn main(){
     let a = 5;
     let b = a;
     println!("a = {a}, b = {b}");   //控制台输出 a = 5, b = 5
 }
-
-//固定长度，数据太大，为减小内存占用，可放在Heep堆内存中
-fun num2(){
+```
+----------固定长度，数据太大，为减小内存占用，可放在Heep堆内存中---------
+```rust
+fn main(){
     //--------定义两个超大数组，要求都可以使用--------
     //具有1000000元素的数组，如果房在stack中，特别占内存
     let a = [0;1000000];
 
-    //赋值给b后，在stack中复制一个数组，导致内存占用的更多了
+    //问题：赋值给b后，在stack中复制一个数组，导致内存占用的更多了
     let b = a;    
     println!("a = {a}, b = {b}");
-
-    //------------解决：将数组放到 Heep 堆中，stack 放指针【与堆相关，涉及到所有权问题】-------------
+}
+```
+------------解决：将数组放到 Heep 堆中，stack 放指针【与堆相关，涉及到所有权问题】-------------
+```rust
+fn main(){
     //通过Box::new()将数组数据放到堆中，a2有stack中存放指针的所有权
     let a2 = Box::new([0;1000000]);
 
-    //如下赋值，将a2 存放的指针 所有权 转让给 b2，a2失去了指向堆的指针，stack释放a2数据，a2成为未定义状态
+    //问题：如下赋值，将a2 存放的指针 所有权 转让给 b2，a2失去了指向堆的指针，stack释放a2数据，a2成为未定义状态
     let b2 = a2;   
 
     //所以当输出 a2 时报错，b2 正常使用
     println!("a2 = {a2}, b2 = {b2}");
 }
-
-
-
 ```
+------------解决：使用close()方法克隆堆（Heep）数据------------
+```rust
+fn main(){
+    //String 类型堆操作
+    let a3 = String::from(“test”);
+
+    // clone()方法，将堆复制，a3_clone的栈针指向新的堆，即创建新的所有权
+    let a3_clone = a3.clone();
+    let a4 = add_suffix(a3_clone);
+    println!("{a3_clone}, originally {a3}");
+}
+fn add_suffix(mut name:String) -> String{
+    name.push_str(" Dr. ");
+    name
+}
+```    
+-----------直接“字符串”和String::from("字符串区别")----------   
+- **变量 = “字符串”**：变量固定长度，存放到stack中
+- **变量 = String::from("字符串")**：使用String对象，数据存放到Heep堆中，stack存放指针  
+```rust
+fn main(){
+    //"字符串"可以直接赋给其他 变量
+    let b1 = "good rust";
+    let b2 = b1;
+    println!("b1 = {b1}, b2 = {b2}");
+
+    // String 对象，使用clone()方法将Heep堆数据复制一份，新变量通过指针指向复制后的堆
+    let mut c1 = String::from("Hello World");
+    let c2 = c1.clone();
+
+    // c1进行修改，所以需要mut修饰
+    c1.push_str("-->rust");
+
+    let c3 = c1.clone();
+    println!("c1 = {c1}, c2 = {c2}, c3 = {c3}");
+}
+```
+
+
