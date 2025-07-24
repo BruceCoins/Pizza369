@@ -258,7 +258,7 @@ fn greet(g1:&String, g2:&String){
 ```
 #### 解引用 指针来访问数据 （符号 *）   
 ```
-//let mut x = Box::new(1) 在stack(栈)和Heep(堆)中的存放
+//let mut x = Box::new(1) 在 栈(Stack) 和 堆(Heep) 中的存放
 
 栈(Stack):
 ┌─────────────────────┐
