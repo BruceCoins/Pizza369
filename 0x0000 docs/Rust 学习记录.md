@@ -222,5 +222,58 @@ fn main(){
     println!("c1 = {c1}, c2 = {c2}, c3 = {c3}");
 }
 ```
+### 所有权--引用和借用  
+#### 引用：是没有“所有权”的指针  
+```rust
+// String::from()定义字符串，变量作为参数传递给函数，随后输出变量。
+fn main(){
+    let m1 = String::from("Hello");
+    let m2 = String::from("World");
 
+    //调用函数后，m1、m2所有权转移给了参数g1、g2，stack内存释放
+    //函数执行完后，g1、g2的stack也将被释放
+    greet(m1, m2);
+    let s = format!("{}, {}",m1, m2); //此处输出将报错，因为m1、m2已经转移说有权
+}
+
+fn greet(g1:String, g2:String){
+    println!("g1 = {g1}, g2 = {g2}");
+}
+```
+----------通过 **引用** 解决 变量作为参数传递后 所有权转移 的问题-----------
+```rust
+fn main(){
+    let m1 = String::from("Hello");
+    let m2 = String::from("rust");
+
+    // 调用函数后，将创建指针指向 m1、m2所在的stack，再通过m1 m2指向 Heep
+    // 函数执行结束后，两个指针使用内存被释放，m1、m2所有权不受影响
+    greet(&m1, &m2);
+    let s = format("m1 = {}, m2 = {}", m1, m2);
+}
+
+//函数参数为指针，g1、g2获得的不是m1、m2的所有权，
+fn greet(g1:&String, g2:&String){
+    println!("{}, {}", g1, g2);
+}
+```
+#### 解引用 指针来访问数据 （符号 *）
+```rust
+fn test(){
+    let mut x = Box::new(1);   //定义可变指针变量x，数据存放在 Heep 上，x 在 stack 存放指针
+    let a = *x;    //通过 *x 获取指针对应的 Heep 上存放的数据
+    *x += 1;       //x为可变变量，加法操作
+    println!("a = {a}, x = {x}");
+
+    let r1 = &x;   // x为指针，&x 
+    let b = **r1;
+    println!("ri = {r1}, b = {b}");
+
+    let r2 = &*x;
+    let c = *r2;
+    println!("r2 = {r2}, c = {c}");
+}
+
+
+```
 
