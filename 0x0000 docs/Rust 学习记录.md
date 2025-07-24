@@ -132,24 +132,24 @@ fn for_example5(){
 }
 ```
 
-### 所有权( Stack | Heep 内存安全 )   
+### 所有权( Stack | Heap 内存安全 )   
 ``stack frame(栈帧)``：存放函数 **局部变量、参数、返回值** 的内存空间。   
 - 数据小时，stack栈内存中直接存放在数据，数据必须拥有已知的固定大小
-- 数据大时，编译或运行时，数据可能发生变化必须放在Heep中。stack栈内存中存放指针地址指向Heep堆内存，数据实际位置在Heep堆内存中。  
+- 数据大时，编译或运行时，数据可能发生变化必须放在Heap中。stack栈内存中存放指针地址指向Heap堆内存，数据实际位置在Heap堆内存中。  
 
 #### 【1】拥有 Copy strait 属性的类型：可以直接赋值 b = a，要求a、b是如下同类型   
 ```rust   
     所有整型、bool、char、所有浮点型、Tuple(元组)要求其所有字段都是前面的类型   
 ```   
   
-#### 【2】使用 Box 的集合（Heep操作）：不能直接赋值 b = a 操作，否则 a 的值将不再可用，要求a、b是如下同类型    
+#### 【2】使用 Box 的集合（Heap操作）：不能直接赋值 b = a 操作，否则 a 的值将不再可用，要求a、b是如下同类型    
 ```rust
     Vec、String、HashMap...
 ```    
-**Box 内存释放原则**：如果一个变量拥有一个 box ，当 Rust 释放该变量的 stack frame 时，Rust 同时释放该 box 的堆内存（Heep）  
+**Box 内存释放原则**：如果一个变量拥有一个 box ，当 Rust 释放该变量的 stack frame 时，Rust 同时释放该 box 的堆内存（Heap）  
 
-- 移动堆（Heep）数据原则   
-``如果变量 x 将堆（Heep）数据的所有权移动给另一个变量 y，那么在移动后，x 将不能在使用``
+- 移动堆（Heap）数据原则   
+``如果变量 x 将堆（Heap）数据的所有权移动给另一个变量 y，那么在移动后，x 将不能在使用``
 
 ----------固定大小，数据小，存放在stack 中----------
 ```rust
@@ -159,7 +159,7 @@ fn main(){
     println!("a = {a}, b = {b}");   //控制台输出 a = 5, b = 5
 }
 ```
-----------固定长度，数据太大，为减小内存占用，可放在Heep堆内存中---------
+----------固定长度，数据太大，为减小内存占用，可放在Heap堆内存中---------
 ```rust
 fn main(){
     //--------定义两个超大数组，要求都可以使用--------
@@ -171,7 +171,7 @@ fn main(){
     println!("a = {a}, b = {b}");
 }
 ```
-------------解决：将数组放到 Heep 堆中，stack 放指针【与堆相关，涉及到所有权问题】-------------
+------------解决：将数组放到 Heap 堆中，stack 放指针【与堆相关，涉及到所有权问题】-------------
 ```rust
 fn main(){
     //通过Box::new()将数组数据放到堆中，a2有stack中存放指针的所有权
@@ -184,7 +184,7 @@ fn main(){
     println!("a2 = {a2}, b2 = {b2}");
 }
 ```
-------------解决：使用close()方法克隆堆（Heep）数据------------
+------------解决：使用close()方法克隆堆（Heap）数据------------
 ```rust
 fn main(){
     //String 类型堆操作
@@ -202,7 +202,7 @@ fn add_suffix(mut name:String) -> String{
 ```    
 -----------直接“字符串”和String::from("字符串区别")----------   
 - **变量 = “字符串”**：变量固定长度，存放到stack中
-- **变量 = String::from("字符串")**：使用String对象，数据存放到Heep堆中，stack存放指针  
+- **变量 = String::from("字符串")**：使用String对象，数据存放到Heap堆中，stack存放指针  
 ```rust
 fn main(){
     //"字符串"可以直接赋给其他 变量
@@ -210,7 +210,7 @@ fn main(){
     let b2 = b1;
     println!("b1 = {b1}, b2 = {b2}");
 
-    // String 对象，使用clone()方法将Heep堆数据复制一份，新变量通过指针指向复制后的堆
+    // String 对象，使用clone()方法将Heap堆数据复制一份，新变量通过指针指向复制后的堆
     let mut c1 = String::from("Hello World");
     let c2 = c1.clone();
 
@@ -245,7 +245,7 @@ fn main(){
     let m1 = String::from("Hello");
     let m2 = String::from("rust");
 
-    // 调用函数后，将创建指针指向 m1、m2所在的stack，再通过m1 m2指向 Heep
+    // 调用函数后，将创建指针指向 m1、m2所在的stack，再通过m1 m2指向 Heap
     // 函数执行结束后，两个指针使用内存被释放，m1、m2所有权不受影响
     greet(&m1, &m2);
     let s = format("m1 = {}, m2 = {}", m1, m2);
@@ -256,9 +256,10 @@ fn greet(g1:&String, g2:&String){
     println!("{}, {}", g1, g2);
 }
 ```
-#### 解引用 指针来访问数据 （符号 *）   
+#### 解引用【符号 *】获取数据，引用【符号 &】获取当前变量的指针(地址)    
+``简单理解：指针就是引用，获取值就是解引用。通过Box定义的变量就是指针。``  
 ```
-//let mut x = Box::new(1) 在 栈(Stack) 和 堆(Heep) 中的存放
+let mut x = Box::new(1);    在 栈(Stack) 和 堆(Heap) 中的存放
 
 栈(Stack):
 ┌─────────────────────┐
@@ -278,24 +279,24 @@ fn greet(g1:&String, g2:&String){
 
 let mut x = Box::new(1);
 println!("x 的值(指向的堆地址): {:p}", x);     // 打印 x 中存储的指针
-println!("x 的地址(栈地址): {:p}", &x);         // 打印 x 变量在栈上的地址
-println!("*x 的值: {}", *x); 
+println!("x 的地址(栈地址): {:p}", &x);       // 打印 x 变量在栈(stack)上的地址
+println!("*x 的值: {}", *x);                 // 打印 x 在堆(Heap)上实际的值
 ```
 
 举例说明：
 ```rust
 fn test(){
-    let mut x = Box::new(1);   //定义可变指针变量x，数据存放在 Heep 上，x 在 stack 存放指针
-    let a = *x;    //通过 *x 获取指针对应的 Heep 上存放的数据
-    *x += 1;       //x为可变变量，加法操作
+    let mut x = Box::new(1);   //定义可变指针变量x，数据存放在 Heap 上，x 在 stack 存放指针
+    let a = *x;                //通过 *x 获取指针对应的 Heap 上存放的数据
+    *x += 1;                   //x为可变变量，加法操作
     println!("a = {a}, x = {x}");
 
-    let r1 = &x;   // x为指针，&x 
-    let b = **r1;
+    let r1 = &x;               // x为指针，&x对x进行引用，创建一个指针 r1 获取x栈地址 
+    let b = **r1;              // *r1 第一次解引用，获取 x 的指针；**r1第二次解引用，通过x指针获取在 Heap上的值
     println!("ri = {r1}, b = {b}");
 
-    let r2 = &*x;
-    let c = *r2;
+    let r2 = &*x;              // &* 同时使用则相互抵消， &*x即创建一个与 x 指向相同 Heap 的指针
+    let c = *r2;               // 此时 *r2 = *x
     println!("r2 = {r2}, c = {c}");
 }
 
