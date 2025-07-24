@@ -276,7 +276,13 @@ fn greet(g1:&String, g2:&String){
 │ 值: 1                | (*x 获取到的值)
 └─────────────────────┘
 
+let mut x = Box::new(1);
+println!("x 的值(指向的堆地址): {:p}", x);     // 打印 x 中存储的指针
+println!("x 的地址(栈地址): {:p}", &x);         // 打印 x 变量在栈上的地址
+println!("*x 的值: {}", *x); 
 ```
+
+举例说明：
 ```rust
 fn test(){
     let mut x = Box::new(1);   //定义可变指针变量x，数据存放在 Heep 上，x 在 stack 存放指针
