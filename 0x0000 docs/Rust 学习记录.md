@@ -414,10 +414,12 @@ fn main(){
     let v: Vec<i32> = vec![0,1,2];
     let n_ref: &i32 = &v[0];   //获得i32类型引用
     let n: i32 = *n_ref;       //i32 不拥有堆数据，可以在不移动的情况下被复制
+                               //i32 实现了 Copy trait 类型，解引用会复制而不是移动所有权
 
     let v: Vec[String] = vec![String::from("Hello")];
     let s_ref: &String = &v[0];  //获得 String 类型引用
     let s: String = *s_ref    // 报错！ String 拥有对数据，不能在不移动的情况下被复制
+                              // String 没有实现 Copy trait 类型，解引用会移动String所有权
 }
 ```
 【1】不拥有堆数据的类型（数据存储在栈上或静态内存中，无需动态分布内存）：
