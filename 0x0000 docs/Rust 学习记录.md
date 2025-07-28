@@ -494,8 +494,24 @@ fn main(){
         hobbies:vec![String::from("Solidity"),String::from("Rust")]
     };
 ```
-  
+### String Slices(切片)
+- 语法：**[start..end]** 获取字符串 [start,end) 范围切片
+```rust
+let s = String::from("Hello World");   //创建String字符串
+let len = s.len();  //长度11
 
+let x = &s[0..5];  // 获取下标 0~4 范围切片
+let x2 = &s[..5];  //从0开始截取，可省略
+ 
+let y = &s[6..11];  // 获取下标 6~10 范围切片
+let y2 = &s[6..];   // 切片范围到结尾，结尾可直接省略
+
+let z = &[..]    // 将整个 String 作为切片获取
+
+
+
+
+``` 
 
   
 
