@@ -537,11 +537,87 @@ fn first_word(s: &String) -> &str{
 - ``&String``: 是对String类型的引用，只能指向String对象类型  
 - ``&str``：字符串切片的引用，String的一部分，可以直接传递字面字符串 let s = “hello world”  
 
+### 结构体  
+```rust
+fn main(){
+    //初始化 可修改的 结构体对象
+    let mut user1 = User{
+        email : String::from("someone@gmail.com"),
+        username : String::from("Jack"),
+        active: true,
+        sign_in_count: 1, 
+    };
 
+    // 初始化 第二个 结构体对象，与 user1 只有 username 不同，可如下写
+    let mut user2 = User{
+        username: String::from("Jerry");
+        ..user1
+    };
 
-  
+    //获取变量名
+    user1.username = String::from("lucy");
+    
+}
 
+//结构体
+struct User{
+    active:bool,
+    username: String,
+    email: String,
+    sign_in_count:u64,
+}
 
+//参数 与结构体中的字段 一致 时，可以直接写参数名
+fn build_user(email:String, username:String) -> User{
+    active: true,
+    username,
+    email,
+    sign_in_count: 1,
+}
 
+```
+#### Tuple Struct (元组结构体，字段没有名字只有类型)
+```rust
+//定义两个 元组结构体
+struct Color(i32, i32, i32);
+struct Point((i32, i32, i32);
+
+fn main(){
+    //初始化
+    let black = Color(0,0,0);
+    let origin = Point(0,0,0);
+}
+```
+#### Unit-Like Struct (无字段的Struct)
+```rust
+//该结构体 只有名字，没有字段内容
+struct AlwaysEqual;
+
+fn main(){
+    let subject = AlwaysEqual;
+}
+``` 
+#### Derived Traid   
+```rust
+//引入derive，否则不能正常 print
+#[derive(Debug)]
+
+//创建结构体
+struct Rectangle{
+    width: u32,
+    heigh:u32,
+}
+
+fn main(){
+    //结构体初始化赋值
+    let rect1 = Rectangle{
+        width: 20,
+        heigh: 40,
+    };
+
+    //使用 :#? 输出内容
+    println!("rect1 is {:#?}", rect1);
+}
+```
 
 
