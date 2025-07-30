@@ -507,11 +507,37 @@ let y = &s[6..11];  // 获取下标 6~10 范围切片
 let y2 = &s[6..];   // 切片范围到结尾，结尾可直接省略
 
 let z = &[..]    // 将整个 String 作为切片获取
+```
+
+**处理字符串 切片**：
+```rust
+fn main(){
+    let  mut s = String::from("Hello World");
+    let word = first_word(&s);
+    //s.clear();
+    println!("{:?}",word);
+}
+
+fn first_word(s: &String) -> &str{    
+    let bytes = s.as_bytes();                    //转字节数组，返回 切片
+
+    //bites().iter()创建迭代器
+    //enumerate() 为迭代器添加索引，返回(索引,值)的元组 
+    for(i, &item) in bytes.iter().enumerate(){
+
+        // b'' 表示空格字符的 ASCII 值(32)，不适用于汉字操作
+        if item == b' '{
+            return &s[0..i];
+        }
+    }
+    &s[..]
+}
+```
+**优化**：将 first_word 参数 &String 换成 &str   
+- ``&String``: 是对String类型的引用，只能指向String对象类型  
+- ``&str``：字符串切片的引用，String的一部分，可以直接传递字面字符串 let s = “hello world”  
 
 
-
-
-``` 
 
   
 
