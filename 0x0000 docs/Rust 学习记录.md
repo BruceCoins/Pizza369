@@ -673,7 +673,7 @@ fn main(){
 #### 5、方法调用 与 所有权  
 
 ```rust
-//使结构体方法具有 复制、克隆属性
+//使结构体实现了Copy Trait，具有 复制、克隆属性
 #[derive(Copy,Clone)]
 
 //结构体
@@ -709,7 +709,7 @@ impl Rectangle{
     //     引入 #[derive(Copy, Clone)]，使 max() 参数 self 不再要求所有权，
     //     使max()参数self进行复制，而不是获得所有权 Rectangle::max(*self, other);
     fn set_to_max(&mut self, other:Rectangle){
-        *self = self.max(other);     //错误！！
+        *self = self.max(other);     //错误！！解决办法：添加 #[derive(Copy,Clone)]
     }
 }
 
@@ -727,3 +727,24 @@ fn main(){
     println!("{}", rect.area());   //错误！！rect所有权已经转移，无法再调用area()方法
 }
 ```
+**Copy trait 的作用**    
+
+结构体可以通过 #[derive(Copy, Clone)] 自动实现   
+- Copy trait 是针对整个结构体/枚举类型实现的
+- 不是针对 impl 块中的某个具体方法
+- 要么整个类型实现 Copy，要么不实现
+
+以下是不同类型参数在实现 `Copy` trait 前后的行为变化（值类型）：
+
+| 参数类型      | 实现 Copy 前        | 实现 Copy 后               |
+|--------------|--------------------|----------------------------|
+| `&T`         | 借用，不获取所有权    | 借用，不获取所有权（无变化）    |
+| `&mut T`     | 可变借用，不获取所有权 | 可变借用，不获取所有权（无变化）|
+| `T`          | 移动所有权           | 复制值                      |
+| `&Rectangle` | 借用 Rectangle      | 借用 Rectangle（无变化）     |
+| `Rectangle`  | 移动 Rectangle      | 复制 Rectangle             |
+
+这个表格说明了：
+- 引用类型的参数行为不会因 `Copy` trait 而改变
+- 值类型的参数会从移动语义变为复制语义
+- `Copy` trait 主要影响值的传递方式，而不是方法的调用方式
