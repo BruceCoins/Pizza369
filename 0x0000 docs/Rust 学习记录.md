@@ -576,7 +576,7 @@ fn build_user(email:String, username:String) -> User{
 }
 
 ```
-#### Tuple Struct (元组结构体，字段没有名字只有类型)
+#### 1、Tuple Struct (元组结构体，字段没有名字只有类型)
 ```rust
 //定义两个 元组结构体
 struct Color(i32, i32, i32);
@@ -588,7 +588,7 @@ fn main(){
     let origin = Point(0,0,0);
 }
 ```
-#### Unit-Like Struct (无字段的Struct)
+#### 2、Unit-Like Struct (无字段的Struct)
 ```rust
 //该结构体 只有名字，没有字段内容
 struct AlwaysEqual;
@@ -597,7 +597,7 @@ fn main(){
     let subject = AlwaysEqual;
 }
 ``` 
-#### Derived Traid   
+#### 3、Derived Traid   
 ```rust
 //引入derive，否则不能正常 print
 #[derive(Debug)]
@@ -605,19 +605,125 @@ fn main(){
 //创建结构体
 struct Rectangle{
     width: u32,
-    heigh:u32,
+    height:u32,
 }
 
 fn main(){
     //结构体初始化赋值
     let rect1 = Rectangle{
         width: 20,
-        heigh: 40,
+        height: 40,
     };
 
     //使用 :#? 输出内容
     println!("rect1 is {:#?}", rect1);
 }
 ```
+#### 4、Struct 方法(关键字 impl、self)
+```rust
+#[derive(debug)]
+struct Rectangle{
+    width: u32,
+    height:u32,
+}
 
+//关键字：impl， 参数 self
+impl Rectangle{
 
+    // 方法1：第一个参数 &self，实际调用时第一个参数不传值
+    //      &self -> self: &Self 类型 
+   fn area(&self) -> 32{
+        self.width * self.height
+    }
+
+    // 方法2：多参数时，第一参数 &self
+    fn can_hold(&self, other:&Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+
+    //方法3：第一个参数不是 &self 叫做关联函数，此处返回值首字母大写
+    fn square(size: u32) -> Self {
+        Self{
+            width: size,
+            height:size,
+        }
+    }
+}
+
+fn main(){
+    //调用关联函数：
+    let rec = Rectangle::square(3);
+
+    //初始化 构造函数
+    let rect1 = Rectangle{
+        width: 10,
+        height: 20,
+    };
+
+    let rect2 = Rectangle{
+        width: 10,
+        height: 40,
+    };
+
+    //输出结构体
+    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));    //第一个参数不传值调用
+    println!("Can rect1 hold rect2? {}", Rectangle::can_hold(&rect1, &rect2)); //传参调用
+}
+```
+#### 5、方法调用 与 所有权  
+
+```rust
+//使结构体方法具有 复制、克隆属性
+#[derive(Copy,Clone)]
+
+//结构体
+struct Rectangle{
+    width: u32,
+    height: u32,
+}
+
+//方法：
+impl Rectangle{
+    //方法1：&self 不可变引用
+    fn area(&self) -> u32{
+        self.width * self*height
+    }
+
+    //方法2：第一个参数为 可变的引用，
+    fn set_width(&mut self, width:u32){
+        self.width = width;
+    }
+
+    //方法3：参数没有 & ，那么 self 会获得所有权
+    fn max(self, other:Self) -> Self{
+        let m = self.width.max(other.width);
+        let n = self.height.max(other.height);
+        Rectangle{
+            width:m,
+            height:n,
+        }
+    }
+
+    //方法4：&mut可变的引用
+    //     max()方法会获得所有权，参数中self是可变的引用，没法获得所有权
+    //     引入 #[derive(Copy, Clone)]，使 max() 参数 self 不再要求所有权，
+    //     使max()参数self进行复制，而不是获得所有权 Rectangle::max(*self, other);
+    fn set_to_max(&mut self, other:Rectangle){
+        *self = self.max(other);     //错误！！
+    }
+}
+
+fn main(){
+    let rect1 = Rectangle{
+        width: 0,
+        height: 0
+    };
+    let other_rect = Rectangle{
+        width: 1,
+        height: 1
+    };
+    
+    let other_rect = rect.max(other_rect); //max方法会获得 rect和other_rect所有权
+    println!("{}", rect.area());   //错误！！rect所有权已经转移，无法再调用area()方法
+}
+```
