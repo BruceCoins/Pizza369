@@ -880,6 +880,25 @@ fn match_method(){
     println!("six = {:?}, none = {:?}",six,none);  //Some(6), None
 }
 ```
+**所有权** 
+```rust
+let opt = Some(String::from("Hello World"));
+
+//如果要是 Some(s) 起作用，应该使用引用 match &opt{}
+match opt{
+  // 参数为 _ 时，说明没有使用 opt ，所有权未移动， 结尾输出opt可以执行  
+  //Some(_) => println!("Some is {}", s),
+
+  // 参数为 s 时，opt 的 Some(T) 所有权进行了移动，结尾输出opt将报错
+    Some(s) => println!("Some is {}", s);
+  
+    None => println!("None"),
+};
+
+println!("opt = {:?}", opt);
+
+
+```
 - -------------if let-----------------
 ```rust
 fn if_let() {
@@ -898,4 +917,90 @@ fn if_let() {
         None => (),
     }
 }
-  ```
+  ```  
+### Crate 和 Package
+- **Crate**：   
+  - **binary crate**：可执行文件,src/main.rs   
+  - **library crate**： 库文件, src/lib.rs    
+
+- **Package (由多个 crates 组成)：Cargo.toml文件**
+  - 可有多个 binary crates
+  - 最多只能有一个 library crate
+  - 至少有一个 crate
+
+```rust
+// 命令行
+# cargo new project_name         //创建 binary 项目，包含 main.rs
+# cargo new project_name --lib   //创建 binary 项目，包含 lib.rs
+```
+### Model(模块)  
+**声明模块**：``` mod garden  ```   
+**引用模块**：``` use 关键字 ```  
+
+#### 1、创建项目(名为 package_name)  
+- 初始化项目结构
+```
+project_name/
+├── src/
+│   ├── main.rs          # 二进制 binary crate 的入口文件
+├── Cargo.toml
+└── Cargo.lock          # 依赖版本锁文件（自动生成）
+```  
+- Cargo.toml文件   
+```rust  
+[package]
+name = "package_name"    //package 名字
+version = "0.1.0"        //版本
+edition = "2021"         //rust版本信息
+
+[dependencies]           //项目依赖
+```  
+#### 2、model 引用方式  
+【1】内联模式：在引用model的文件内部直接定义  
+```rust
+//直接定义 model，扫描名字后边是否有{}
+mod models{ .. }
+```
+【2】**最常用！！！！**单独创建models.rs文件，再将model列表放到lib.rs中  
+- 项目结构
+```rust
+project_name/
+├── src/
+│   ├── lib.rs           # 库 libary crate 的入口文件
+│   ├── main.rs          # 二进制 binary crate 的入口文件
+│   ├── models.rs        # model文件
+├── Cargo.toml
+└── Cargo.lock
+```
+- lib.rs 文件
+```rust
+mod models;     //"mod 名字" 与 models.rs 文件名 必须一致
+```
+- models.rs 文件
+```rust 
+mod models{ .. }
+```
+
+【3】地址查找  
+<1> lib.rs 中添加要引用的model列表（如 **mod models**）  
+<2> 在 lib.rs 同级别创建文件夹，名字与** models ** 同名 
+<3> 在 model 文件夹内创建 **mod.rs** 文件，存放 model 信息    
+- 项目结构
+```rust
+project_name/
+├── src/
+│   └── models/
+│          └── mod.rs 
+│   ├── lib.rs           # 库 libary crate 的入口文件
+│   ├── main.rs          # 二进制 binary crate 的入口文件
+├── Cargo.toml
+└── Cargo.lock
+```
+- lib.rs 文件
+```rust
+mod models;     //"mod 名字" 与 models.rs 文件名 必须一致
+```
+
+
+
+
