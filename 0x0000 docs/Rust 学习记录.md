@@ -748,3 +748,154 @@ fn main(){
 - 引用类型的参数行为不会因 `Copy` trait 而改变
 - 值类型的参数会从移动语义变为复制语义
 - `Copy` trait 主要影响值的传递方式，而不是方法的调用方式
+
+  ### Enum 枚举
+```rust
+//枚举
+fn main() {
+    println!("Hello, world!");
+
+    let x = value_in_coin(Coin::BTC);
+    let y = value_in_coin(Coin::USDT(UsState::Alabama));
+    println!("x = {}, y = {}",x,y);
+
+    match_method();
+}
+
+//定义枚举(驼峰命名法)
+enum IpAddrKind {
+    V4,
+    V6,
+}
+fn enum_demo() { 
+    let four = IpAddrKind::V4;
+    let six = IpAddrKind::V6;
+} 
+```
+- -------enum + struct---------  
+```rust
+//定义结构体,包含枚举
+struct IpAddr {
+    kind: IpAddrKind,
+    address: String,
+}
+// 
+fn enum_demo2(){
+    let home = IpAddr{
+        kind: IpAddrKind::V4,
+        address: String::from("127.0.0.1"),
+    };
+    
+    let loopback = IpAddr{
+        kind: IpAddrKind::V6,
+        address: String::from("192.168.1.1"),
+    };
+}
+```
+- -----------简化 上述代码------------  
+```rust
+//定义枚举，规定了枚举值类型
+enum IpAddr2{
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+//创建枚举值
+fn enum_demo3(){
+    let home = IpAddr2::V4(127,0,0,1);
+    let loopback = IpAddr2::V6(String::from("192.168.1.1"));
+}
+```
+- ------------枚举值多类型、方法调用------------
+```rust
+//定义枚举
+enum Message{
+    Quit,
+    Move{x: i32, y: i32},
+    Write(String),
+    ChangeColor(i32, i32, i32),
+} 
+//定义枚举方法，与Struct类似
+impl Message{
+    fn call(&self){
+        //方法定义
+    }
+}
+```
+- ------------Option枚举 ------------
+```rust
+//Option来自标准库，可以直接使用Some和None
+// Option<T> 和 T 是不同的类型
+// enum Option<T>{
+//     Some(T),
+//     None,
+//}
+
+//创建Option,直接使用Some和None
+fn enum_demo4(){ 
+    let some_number = Some(8);
+    let some_thing = Some("hello");
+    let absent_number: Option<i32> = None;
+}
+```
+- ----------Match 匹配：必须穷尽所有情况------------
+```rust
+#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+}
+
+enum Coin {
+    BTC,
+    ETH,
+    USDT(UsState),
+}
+
+fn value_in_coin(coin: Coin) -> String{
+    match coin{
+        Coin::BTC => String::from("1"),
+        Coin::ETH => {
+            println!("ETH");
+            String::from("3")
+        },
+        Coin::USDT(state) => {
+            println!("UsState is {:?}",state);
+            String::from("5")
+        },
+    }
+}
+```
+- -----------match + option--------------
+```rust
+fn match_option(x:Option<i32>) -> Option<i32>{
+    match x{
+        Some(i) => Some(i+1),
+        None => None,
+    }
+}
+fn match_method(){
+    let five = Some(5);
+    let six = match_option(five);
+    let none = match_option(None);
+    println!("six = {:?}, none = {:?}",six,none);  //Some(6), None
+}
+```
+- -------------if let-----------------
+```rust
+fn if_let() {
+    let config_max = Some(3u8);
+    
+    //只是判断一两种情况时使用
+    if let Some(max) = config_max {
+        println!("if_let the max is {}",max);
+    }else{
+        println!("if_let the max is none");
+    }
+
+    //需要穷尽所有情况
+    match config_max{
+        Some(max) => println!("match The max is {}",max),
+        None => (),
+    }
+}
+  ```
