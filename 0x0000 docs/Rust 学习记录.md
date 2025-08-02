@@ -958,7 +958,7 @@ edition = "2021"         //rust版本信息
 #### 2、model 引用方式  
 【1】内联模式：在引用model的文件内部直接定义  
 ```rust
-//直接定义 model，扫描名字后边是否有{}
+//直接在文件中定义 model，扫描名字后边是否有{}
 mod models{ .. }
 ```
 【2】**最常用！！！！**单独创建models.rs文件，再将model列表放到lib.rs中  
@@ -985,13 +985,14 @@ mod models{ .. }
 <1> lib.rs 中添加要引用的model列表（如 **mod models**）  
 <2> 在 lib.rs 同级别创建文件夹，名字与** models ** 同名 
 <3> 在 model 文件夹内创建 **mod.rs** 文件，存放 model 信息    
-- 项目结构
+
+- 项目结构  
 ```rust
 project_name/
 ├── src/
-│   └── models/
-│          └── mod.rs 
-│   ├── lib.rs           # 库 libary crate 的入口文件
+│   └── models/          # 列表名与 lib.rs 中一致
+│          └── mod.rs    # 必须是此命
+│   ├── lib.rs           # 库 libary crate 的入口文件：mod models;
 │   ├── main.rs          # 二进制 binary crate 的入口文件
 ├── Cargo.toml
 └── Cargo.lock
@@ -1000,7 +1001,36 @@ project_name/
 ```rust
 mod models;     //"mod 名字" 与 models.rs 文件名 必须一致
 ```
+#### 3、models 模块的 子模块
+【1】  
+<1> 在models.rs文件中添加 子模块 （如：mod enums;） 
+<2> 创建models.rs 同级别同名的 models 文件夹  
+<3> 在 models 文件夹中创建 子模块文件，文件名与 models.rs中写入的子模块文件名一致
 
+- 项目结构
+```rust
+project_name/
+├── src/
+│   └── models/          # (2) 创建 父模块同名的 models 文件夹
+│          └── enums.rs  # (3) 创建子模块文件，名字一致
+│   ├── lib.rs           # 库 libary crate 的入口文件：mod models;
+│   ├── main.rs          # 二进制 binary crate 的入口文件
+│   ├── models.rs        # (1) 写入子模块 (如：mod enums;)
+├── Cargo.toml
+└── Cargo.lock
+```
+【2】子模块 调用  
+```rust
+fn main(){
+    //m1与main同等级，m2、method1()需要pub修饰才可访问
+    m1::m2::method1();
+}
 
-
-
+mod m1{             //m1默认是私有的，但与main是同等级，可直接调用
+    pub mod m2{     //m2是m1子模块，默认私有的，需要提高等级，使用pub 才可以访问
+        pub fn method1(){    //method1()是m1的方法，默认私有，也需要提高等级，使用pub才可以访问
+            println!("Method1");
+        }
+    }
+}
+```
