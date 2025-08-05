@@ -1205,7 +1205,9 @@ edition = "2021"
 [dependencencies]
 csv = "1.3.0" 
 ```
-#### 2、命令行添加  
+#### 2、使用命令行添加  
 ```rust
 # cargo add csv     //自动修改Cargo.toml文件
 ```
+
+### Vectors 集合 
