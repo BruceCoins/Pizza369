@@ -1097,6 +1097,7 @@ edition = "2021"         //rust版本信息
 let y = package_name::models::enums::YesNo::Yes;
 ```
 【3.1】多种模块调用  
+
 只需在 model.rs 中引入模块名，在 models 文件夹创建模块文件  
 - 项目结构
 ```rust
@@ -1117,8 +1118,9 @@ pub mod enums;
 pub mod structs;    //添加 struct 模块
 ```  
 - 在 models 文件夹下创建  structs.rs 文件
+
 📝: **枚举** 提高访问权限只需要在 类名 前加 pub 即可  
-    **结构体** 必须 类名、属性 都加上 pub 
+📝: **结构体** 必须 类名、属性 都加上 pub 
 ```rust
 //引入 enums 模块中的枚举数据
 use ctrate::model::enums::YesNo;
@@ -1145,4 +1147,65 @@ fn main(){
         main_road: YesNo::Yes
     };
 }
+```
+#### 4、使用 use 引用模块：  
+**function**:引用到父模块  
+**struct, enum...**：引用 完整路径   
+
+-  use 引用到项目有同名方法
+
+【1】 方法1：use引用到父级，使用时带上父级名称，如 fmt::Reslt
+```rust
+main(){
+    use std::fmt;
+    use std::io;
+
+    fn func1() -> fmt::Restlt<()>{
+        printl!("引用 fmt ");
+    }
+
+    fn func2() -> io::Restlt<()>{
+        println!("引用 io");
+    }
+}
+```
+【2】使用 as 关键字为引用起一个别名  
+```rust
+main(){
+    use std::fmt::Result;
+    use std::io::Restlt as IoResult;
+
+    fn func1() -> Result {
+        println!("引用 fmt::Result ");
+    }
+
+    fn func2() -> IoResult{
+        println!("引用 io::Result ");
+    }
+}
+```
+【3】应用同一个库下的多个模块时，使用{} 
+```rust
+use csv::Writer;
+use csv::ReaderBuilder;
+
+//上边引用可以用{}合并
+use csv::{Writer, ReaderBuilder};
+```
+
+### 添加第三方库  
+#### 1、手动在Cargo.toml文件中添加  
+```rust
+[package]
+name = "project_name"
+version = "0.1.0"
+edition = "2021"
+
+#在dependen下添加要引入的第三方库
+[dependencencies]
+csv = "1.3.0" 
+```
+#### 2、命令行添加  
+```rust
+# cargo add csv     //自动修改Cargo.toml文件
 ```
