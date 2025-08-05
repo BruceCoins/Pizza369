@@ -1022,6 +1022,7 @@ project_name/
 ```
 【2】子模块 调用(相对路径、绝对路径)  
 ```rust
+//main.rs 文件 
 fn main(){
     //绝对路径调用： m1与main同等级，m2、method1()需要pub修饰才可访问
     crate::m1::m2::method1();
@@ -1052,5 +1053,96 @@ mod x1{
     }
 }
 ```
+【3】 main() 在 binary crate中，而 模块 在libary crate中
+- 项目结构
+```rust
+project_name/
+├── src/
+│   └── models/          # (2) 创建 父模块同名的 models 文件夹
+│          └── enums.rs  # (3) 创建 子模块文件，名字一致
+│   ├── lib.rs           # 库 libary crate 的入口文件：mod models;
+│   ├── main.rs          # 二进制 binary crate 的入口文件
+│   ├── models.rs        # (1) 写入子模块，'mod 子模块文件名' (如：mod enums;)
+├── Cargo.toml
+└── Cargo.lock
+```
+- lib.rs 使用 pub 修饰
+```rust
+pub mod models;
+```
+- models.rs 使用 pub 修饰 
+```rust
+pub mod enums;
+```
+- enums.rs  
+```rust
+//枚举类型，pub修饰
+pub enum YesNo{
+    Yes,
+    No
+}
+```
+- Cargo.toml 配置文件
+```rust
+[package]
+name = "package_name"    //package 名字
+version = "0.1.0"        //版本
+edition = "2021"         //rust版本信息
 
+[dependencies]           //项目依赖
+```
+- main.rs 中不能直接调用 lib.rs 中定义的model，可以通过 Cargo.toml 中的 **package_name** 来实现
+```rust
+// let y = crate:: 不能调用数据，使用 package_name
+let y = package_name::models::enums::YesNo::Yes;
+```
+【3.1】多种模块调用  
+只需在 model.rs 中引入模块名，在 models 文件夹创建模块文件  
+- 项目结构
+```rust
+project_name/
+├── src/
+│   └── models/          # (2) 创建 父模块同名的 models 文件夹
+│          └── enums.rs  # (3) 创建 子模块文件，名字一致
+│          └── struts.rs  # (3) 创建 子模块文件，名字一致
+│   ├── lib.rs           # 库 libary crate 的入口文件：mod models;
+│   ├── main.rs          # 二进制 binary crate 的入口文件
+│   ├── models.rs        # (1) 写入子模块，'mod 子模块文件名' (如：mod enums;)
+├── Cargo.toml
+└── Cargo.lock
+```
+- models.rs文件
+```rust
+pub mod enums;
+pub mod structs;    //添加 struct 模块
+```  
+- 在 models 文件夹下创建  structs.rs 文件
+📝: **枚举** 提高访问权限只需要在 类名 前加 pub 即可  
+    **结构体** 必须 类名、属性 都加上 pub 
+```rust
+//引入 enums 模块中的枚举数据
+use ctrate::model::enums::YesNo;
 
+pub struct HousePrice{
+    pub price: u32,
+    pub area:String,
+    pub bed_rooms: u32,
+    pub main_road: YesNo
+}  
+```
+- main.rs
+```rust
+use package_name::models::structs::HousePrice;
+
+fn main(){
+    let y = package_name::models::enums::YesNo::Yes;
+
+    //通过 use 引入 HousePrice
+    let house_price = HousePrice{
+        price: 1000,
+        area: String::from("Center"),
+        bed_rooms: 3,
+        main_road: YesNo::Yes
+    };
+}
+```
