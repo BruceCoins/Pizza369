@@ -1211,4 +1211,76 @@ csv = "1.3.0"
 ```
 
 ### Vectors 集合 
+```rust
+use std::usize;
 
+//vectior 集合
+fn main() {
+    println!("Hello, world!");
+    modify_vectior();
+    read_vector(); 
+    find_element(&vec![1,2,3],1,4);
+}
+
+//创建 vector
+fn new_vector(){
+    //创建空的vector，需要指定类型
+    let v: Vec<i32> = Vec::new();
+
+    //创建vector，并初始化，不需要指定类型
+    let v = vec![1,2,3,4,5];
+}
+
+//修改vector
+fn modify_vectior(){
+    // 创建一个可变 vector 并使用 push 方法添加元素
+    let mut v = Vec::new();
+    v.push(90);
+    v.push(100);
+    v.push(110);
+
+   // v.push("aa");  报错！通过push 方法只能添加相同类型的元素
+    println!("vector: {:?}",v);
+}
+
+//访问 vector 中的元素
+fn read_vector(){
+    //-------- 方法1：引用 --------------
+    let v = vec![1,2,3,4,5];
+    let second = &v[1];  // 通过索引访问 vector 中的元素
+    println!("the second element is: {}", second);
+
+    //--------- 方法2：get() 方法 ------------
+    let third = v.get(2);
+    match third{
+        Some(third) => println!("the third element is: {}", third),
+        None => println!("there is no third element"),
+    }
+}
+
+//遍历vector
+fn vector_iter(){
+    //遍历输出vector中的元素
+    let v = vec![1,2,3,4,5];
+    for i in &v{
+        println!("{}", i);
+    }
+
+    //遍历修改vector中的元素，mut 修饰
+    let mut x = vec![1,2,3,4,5];
+    for i in &mut x{
+        *i += 50;
+        println!("{}", i);
+    }
+}
+
+// vector 所有权 
+fn vector_ownership(){ 
+    let mut v = vec![1,2,3,4,5];
+    let first = &v[0];
+
+    //v.push(88);  //报错! first 引用了 v 中的元素，v 的所有权被转移给 first。
+                   //v无权操作，first 使用结束后才可以将所有权放给 v
+    println!("the first element is: {}", first);
+}
+```
