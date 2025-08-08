@@ -1259,7 +1259,7 @@ fn read_vector(){
 }
 
 //遍历vector
-fn vector_iter(){
+fn vector_for(){
     //遍历输出vector中的元素
     let v = vec![1,2,3,4,5];
     for i in &v{
@@ -1283,4 +1283,17 @@ fn vector_ownership(){
                    //v无权操作，first 使用结束后才可以将所有权放给 v
     println!("the first element is: {}", first);
 }
+```
+#### iter 遍历器  
+```rust
+//使用 iterator 指针遍历
+fn vector_iter(){ 
+    let mut v: Vec<i32>  = vec![1,2];
+    let mut iter:Iter<'_,i32> = v.iter();     //iter()返回指针,默认指向第一个元素 1        
+    let n1 = iter.next().unwrap();            //iter().next()指向下一个元素，返回Option类型，指向前一个元素，
+                                              //使用 unwrap()进行解包，获取前一个元素值
+    let n2 = iter.next().unwrap();
+    let end = iter.next();
+    println!("the first element is: {}, the second element is: {}, the last element is: {:?}", n1, n2, end);
+} 
 ```
