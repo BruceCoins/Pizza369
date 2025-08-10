@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>eth_client_login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"></link>
+</head>
+
+<body>
+
+    <nav class = "navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-text">GitHub: @Bruce</span>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3">
+        <h5>Account: <span class="showAccount" id="accountsSpan"></span></h5>
+        <h5>Network: <span class="showAccount" id="networkSpan"></span></h5>
+        <h5>ChainId: <span class="showAccount" id="chainIdSpan"></span></h5>
+    </div>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+    const initialize = async () => {
+
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+
+        const network = await window.ethereum.request({ method: 'net_version' });
+
+        document.getElementById("accountsSpan").innerHTML = accounts;
+
+        document.getElementById("chainIdSpan").innerHTML = chainId;
+
+        document.getElementById("networkSpan").innerHTML = network;
+    }
+
+    window.addEventListener('DomContentLoaded', initialize);
+</script>
+
+
+</html>
