@@ -61,3 +61,36 @@ fn iter_map(){
     }
 }
 ```
+
+### 更新 HashMap 
+```rust
+fn update_map(){
+	
+	let mut map = HashMap::new();
+	
+	//方法1：使用insert()更新，key 存在，则覆盖
+	map.insert(String::from("Blue"),10);
+	map.insert(String::from("Blue"),22);
+	println!("insert map is {:?}", map);
+	
+	//方法2：使用entry
+	//       key存在，value不变；key不存在，则插入k-v对
+	map.entry(String::from("Blue")).or_insert(33);
+	map.entry(String::from("Yellow")).or_insert(99);
+	println!("entry map:{:?}", map);
+}
+```
+使用entry计算单词数
+```rust
+fn count_word(){
+	let text = "hello world wonderful world";
+	let mut map = HashMap::new();
+	
+	// 循环 text,空格分割，将单词作为key，单词出现的次数作为 value
+	for word in text.split_whitespace(){
+		let count = map.entry(word).or_insert(0);
+		*count += 1;
+	}
+	println!("{:#?}", map);
+}
+```
