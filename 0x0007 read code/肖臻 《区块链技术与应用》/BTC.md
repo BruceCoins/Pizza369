@@ -29,7 +29,7 @@
   ```
 
 ### 【3】Markle proof   
-- **轻节点只存放block header(区块头)，验证交易是否在区块中：**  
+- **轻节点只存放block header(区块头)，验证交易 是否在区块中：**  
 ```
   <1> 轻节点收到交易后，向全节点发送查询请求，要求提供该交易的Merkle路径。  
   
@@ -39,7 +39,7 @@
 ```
   ![Markle proof](https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/Markle%20Tree.png)  
 
-- **轻节点验证交易不在区块中：sortedMerkleTree(排序的Merkle树)**   
+- **轻节点验证交易 不在区块中：sortedMerkleTree(排序的Merkle树)**   
 ```
 <1> 对所有交易Hash，进行排序，并生成排序后的Merkle树。
 
@@ -98,3 +98,4 @@ UTXO 只记录 B 剩余的 50 BTC 、C 的50 BTC、D 的50 BTC。
 
 
 ## 五、BTC 网络原理 
+
