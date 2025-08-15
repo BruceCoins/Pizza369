@@ -37,7 +37,7 @@
   
   <3> 即使交易在区块中，还要验证是否属于“最长有效链”。
 ```
-  ![Markle proof](https://github.com/yangyangwithgnu/pic/blob/master/Markle%20proof.png)  
+  ![Markle proof](https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/Markle%20Tree.png)  
 
 - 轻节点验证交易不在区块中：sortedMerkleTree(排序的Merkle树)   
 ```
