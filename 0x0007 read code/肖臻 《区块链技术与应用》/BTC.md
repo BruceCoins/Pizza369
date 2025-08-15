@@ -72,7 +72,7 @@ POW 工作量证明、（出块奖励 + 交易费）
 
 ## 四、BTC 实现  
 ### 基于交易模式（transaction-based ledger）--- BTC 
-UTXO（unspent transaction output）还没有被花出去的交易的输出  
+UTXO（unspent transaction output）还没有被花出去的交易的输出，简单理解为 账户余额  
 - 每个元素给出 产生输出的交易Hash值、以及在交易中的索引位置，就可以定位到这个交易输出
 ```   
 A 转给 B 100 BTC，转给 C 50 BTC；B 又转给 D 50 BTC
@@ -82,6 +82,17 @@ UTXO 只记录 B 剩余的 50 BTC 、C 的50 BTC、D 的50 BTC。
 	   |  
 	   |--> C (50 BTC)  
 ```  
+工作 流程示例：
+```
+(1) 生成 UTXO：A 向 B 转账 0.5 BTC，交易创建两个输出：
+	-> 输出 1：0.5 BTC 给 B（锁定到 B 的公钥）
+	-> 输出 2：剩余资金（找零）返回给 A（锁定到 A 的公钥）。
+	  这两个输出均为 UTXO，分别属于 B 和 A。
+(2) 花费 UTXO：B 要向 C 转账 0.3 BTC 时，需引用上述 0.5 BTC 的 UTXO 作为输入，通过私钥签名解锁，然后生成新输出：
+	-> 输出 1：0.3 BTC 给 C
+	-> 输出 2：0.2 BTC 找零给 B。
+	原 0.5 BTC 的 UTXO 被标记为 “已花费”，新生成的两个输出成为新的 UTXO。
+```
 
 ### 基于账户模式 (account-based ledger) --- 以太坊  
 
