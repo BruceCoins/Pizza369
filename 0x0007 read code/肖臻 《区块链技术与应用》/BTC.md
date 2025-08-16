@@ -97,5 +97,39 @@ UTXO 只记录 B 剩余的 50 BTC 、C 的50 BTC、D 的50 BTC。
 ### 基于账户模式 (account-based ledger) --- 以太坊  
 
 
-## 五、BTC 网络原理 
+## 五、BTC 网络原理   
+所有节点地位同等，区块大小 1M 字节   
+
+## 六、BTC 调整挖矿难度   
+### 【1】目标阈值
+SHA-256(block header) <= target   
+目标阈值target 越小，挖矿难度越大   
+
+### 【2】挖矿难度   
+挖矿难度 与 目标阈值 成反比。阈值越小难度越大   
+
+### 【3】为什么提高难度，维持出块10分钟    
+应对算力变化，避免分叉，提高发动51%攻击难度，保持稳定  
+
+### 【4】如何调整目标阈值,调整挖矿难度   
+比特币规定每 2016 个区块调整一次目标阈值，大概14天  
+```
+目标阈值：		     actual time
+target = target * -------------------
+                    expected time
+
+挖矿难度：			 					   expected time 
+next_difficulty = previous_difficulty * -------------------
+                                            actual time
+
+actual time ：系统中产生最近 2016 个区块实际花费时间
+expected time : 2016 * 10min (2016个区块预期花费时间 2周)
+```
+
+
+
+
+
+
+
 
