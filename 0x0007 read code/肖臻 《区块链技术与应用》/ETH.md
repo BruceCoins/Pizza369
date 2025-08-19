@@ -238,7 +238,8 @@ memory hard minng puzzle
 
 ## 七、以太坊难度调整算法  
 ### 【1】区块难度公式  
-![eth_puzzle](https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle.png)
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle.png" width = "60%">  
+
 - 核心作用与设计目标  
 **1. 维持出块速度：**  
 通过 x×ς2 动态抵消全网算力变化的影响（算力↑→难度↑，算力↓→难度↓ ），确保平均出块时间稳定（以太坊 PoW 阶段目标约 12-15 秒）。  
@@ -248,36 +249,37 @@ max(D0 ,...)保证即使算力极端低迷，难度也不会低于 131072，避�
 难度炸弹 ϵ 是 “硬分叉倒计时器”，随区块高度增加，PoW 挖矿成本指数级上升，最终让 PoW 不可行，促使社区完成向 PoS 的 Merge 升级（以太坊 2022 年 Merge 后，难度炸弹机制已失效）。
 
 ### 【2】自适应难度调整  
-![](https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle2.png)    
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle2.png" width = "60%">
 
 > **参数详解**  
-- **调整单位 $x \equiv \left[\frac{P(H)_{H_d}}{2048}\right]$**  
+- **调整单位 $x \equiv \lfloor\frac{P(H)_{H_d}}{2048}\rfloor$**  
      -   **$P(H)_{H_d}$** ：父区块的难度值（父区块头 Difficulty 字段，反映挖矿难度的数值）。  
      -   **$\lfloor \cdot \rfloor$** ：向下取整操作，确保 x 为整数。  
      -   **作用：** 将父区块难度按照 2048 为粒度拆分，控制难度调整的基础步长（父区块难度越大，x越大，调整幅度的基础单位越高）。
 
-- **调整系数 $\varsigma_2 \equiv \max \left( y - \left|\frac{H_s - P(H)_{H_s}}{9} \right|, -99 \right)$**
+- **调整系数 $\varsigma_2 \equiv \max \left( y - \lfloor\frac{H_s - P(H)_{H_s}}{9} \rfloor, -99 \right)$**
      - **y:** 与父区块是否包含叔父块（uncle）相关：  
           -    包含叔父块： y = 2 （因叔父块增发 ETH，需要提高难度抵消通胀）；
           -  不包含叔父块： y = 1 （正常难度调整逻辑）；
      - **$H_s$** ：当前区块的时间戳（区块头 timestamp，记录区块的创建时间）；
      - **$P(H)_{H_s}$** ：父区块的时间戳（夫区块头 timestamp）；
-     - $\left[ \frac{H_s - P(H)_{H_n}}{9} \right]$ ：计算**当前区块与父区块的时间差**，并按 9 为单位差分，反映出块速度偏差；
+     - $\lfloor \frac{H_s - P(H)_{H_n}}{9} \rfloor$ ：计算**当前区块与父区块的时间差**，并按 9 为单位差分，反映出块速度偏差；
      - **max(⋅, -99)**：限制下调的对大幅度，繁殖极端情况导致难度暴跌；
   
-​![](https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle3.png)  
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle3.png" width = "60%">
 
 ### 【3】 难度炸弹  
-![](https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle4.png)  
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle4.png" width = "60%">  
+
 > **计算逻辑**
-难度炸弹的数学定义分两步，核心是**区块高度驱动的指数增长**
-- **伪区块高度 $H'_i$ 的计算**  
-  $H'_i \equiv \max \left(H_i - 3000000, 0 \right)$
-  - **$H_i$**：当前区块真实高度（区块链中地政的区块编号，创世块为 0 ）；
-  - **max(.,0)**：保证 $H'_i$ 非负（区块高度不足 300 万时，难度炸弹不激活）；
+难度炸弹的数学定义分两步，核心是**区块高度驱动的指数增长**  
+- **伪区块高度 $H'_i$ 的计算**   
+  $H'_i \equiv \max \left(H_i - 3000000, 0 \right)$  
+  - **$H_i$**：当前区块真实高度（区块链中地政的区块编号，创世块为 0 ）；  
+  - **max(.,0)**：保证 $H'_i$ 非负（区块高度不足 300 万时，难度炸弹不激活）；  
     
-- **难度炸弹 $\epsilon$ 的计算**
-  $\epsilon \equiv \left[ 2 \left| H'_i - 100000 \right| - 2 \right]$
-  - **$\left| H'_i - 100000 \right|$**：将伪区块高度 **按每10 万区块**为周期拆分，控制指数增长的频率；  
+- **难度炸弹 $\epsilon$ 的计算**  
+  $\epsilon \equiv \lfloor 2^ {\lfloor H'_i - 100000 \rfloor - 2} \rfloor$
+  - **$\lfloor H'_i - 100000 \rfloor$**：将伪区块高度 **按每10 万区块**为周期拆分，控制指数增长的频率；  
   - **$2^.$**：指数增长，每 10 万区块难度炸弹值翻倍；  
-  - **$\left|.\right|$**：向下取整，确保 $\epsion$ 是整数难度值；  
+  - **$\lfloor⋅\rfloor$**：向下取整，确保 $\epsilon$ 是整数难度值；  
