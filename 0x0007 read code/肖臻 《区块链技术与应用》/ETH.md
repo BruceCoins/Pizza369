@@ -238,7 +238,7 @@ memory hard minng puzzle
 
 ## 七、以太坊难度调整算法  
 ### 【1】区块难度公式  
-<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle.png" width = "60%">  
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle.png" width = "50%">  
 
 - 核心作用与设计目标  
 **1. 维持出块速度：**  
@@ -249,7 +249,7 @@ max(D0 ,...)保证即使算力极端低迷，难度也不会低于 131072，避�
 难度炸弹 ϵ 是 “硬分叉倒计时器”，随区块高度增加，PoW 挖矿成本指数级上升，最终让 PoW 不可行，促使社区完成向 PoS 的 Merge 升级（以太坊 2022 年 Merge 后，难度炸弹机制已失效）。
 
 ### 【2】自适应难度调整  
-<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle2.png" width = "60%">
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle2.png" width = "50%">
 
 > **参数详解**  
 - **调整单位 $x \equiv \lfloor\frac{P(H)_{H_d}}{2048}\rfloor$**  
@@ -266,10 +266,10 @@ max(D0 ,...)保证即使算力极端低迷，难度也不会低于 131072，避�
      - $\lfloor \frac{H_s - P(H)_{H_n}}{9} \rfloor$ ：计算**当前区块与父区块的时间差**，并按 9 为单位差分，反映出块速度偏差；
      - **max(⋅, -99)**：限制下调的对大幅度，繁殖极端情况导致难度暴跌；
   
-<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle3.png" width = "60%">
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle3.png" width = "50%">
 
 ### 【3】 难度炸弹  
-<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle4.png" width = "60%">  
+<img src = "https://github.com/BruceCoins/Pizza369/blob/main/0x0007%20read%20code/%E8%82%96%E8%87%BB%20%E3%80%8A%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%BA%94%E7%94%A8%E3%80%8B/images/eth_puzzle4.png" width = "50%">  
 
 > **计算逻辑**
 难度炸弹的数学定义分两步，核心是**区块高度驱动的指数增长**  
