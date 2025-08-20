@@ -369,3 +369,43 @@ max(D0 ,...)保证即使算力极端低迷，难度也不会低于 131072，避�
 
 **先合约后挖矿：** 先执行智能合约更新【”三棵树“（状态树、交易树、收据树）】，后根据”三棵树“的根哈希值等 block head 信息挖矿竞争记账权  
 
+### 智能合约获取区块信息  
+```solidity
+block.blockhash(uint blockNumber) returns (bytes32):获取给定区块的哈希---仅对最近256个区块有效
+block.coinbase(address):挖出当前区块的矿工地址
+block.difficuly(uint)：当前区块难度
+block.gaslimit(uint)：当前区块的gas限额
+block.number(uint)：当前区块号
+block.timestamp(uint)：自 uinx epoch 起始当前区块以秒计的时间戳
+```
+### 智能合约可以获得的调用信息
+```solidity
+msg.data(bytes)：完整的 calldata
+msg.gas(uint)：剩余 gas
+msg.sender(address)：消息发送者（当前调用）
+msg.sig(uint)：calldata的前4字节（也就是函数标识符）
+msg.value(uint)：随消息发送的 wei 的数量
+now(uint)：目前区块时间戳（block.timestamp）
+tx.gasprice(uint)：交易的 gas 价格
+tx.origin(address)：交易发起者（完全的调用链）
+```
+### 地址类型  
+```diff 
+- <address\>.balance(uint256)
+以 wei 为单位的 地址类型 的余额
+
+- <address>.transfer(uint256 amount)
+向 地址类型 发送数量为 amount 的 Wei，失败时抛出异常，发送 2300 gas 的矿工费，不可调节
+
+- <address>.send(uint256 amount) returns (bool)
+向 地址类型 发送数据为 amount 的 Wei，失败时返回 false，发送 2300 gas的矿工费用， 不可调节
+
+- <address>.call(...) returns(bool)
+发出底层 CALL ，失败时返回 false ，发送所有可用的 gas，不可调节
+
+- <address>.calldata(...) returns(bool)
+发出底层 CALLCODE，失败时返回 false， 发送所有可用 gas，不可调节
+
+- <address>.delegatecall(...) returns (bool)
+发出底层 DELEGATECALL ，失败返回 false， 发送所有 gas，不可调节
+```
