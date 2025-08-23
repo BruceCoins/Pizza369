@@ -434,4 +434,77 @@ tx.origin(address)：交易发起者（完全的调用链）
 **其次考虑 ``transfer()``**：适合向外部账户（EOA）转账  
 **避免使用 ``send()``**：solidity 0.7.0 后已不推荐使用
 
-### 【10】
+## 九、The DAO(Deccentralized Autonomous  Organization)  
+### 【1】 重入攻击  
+> **漏洞源码：**
+```diff
+function spiltDao(
+     uint _proposalID,
+     address _newCurator
+) noEther onlyTokenholders returns (bool _success) {
+     ......
+     // Burn DAO Tokens
+     Transfer(msg.sender, 0, balances[msg.sender]);
+-    withdrawRewardFor(msg.sender);        //把钱还给调用者  
+-    totalSupply -= balances[msg.sender];  //减少Dao中总金额 
+-    balances[msg.sender] = 0;          //将调用者 账户清零   
+     paidOut[msg.sender] = 0;
+     return true;          
+}
+``` 
+代码来源：https://etherscan.io/address/0x304a554a310C7e546dfe434669C62820b7D83490#code   
+> **攻击过程：**  
+
+- 1、**攻击者部署恶意合约**v  
+攻击者创建一个恶意合约，该合约包含fallback或receive函数（当收到 ETH 时会自动触发），且在该函数中再次调用spiltDao函数（或其他可提款的函数）
+
+- 2、**攻击者触发spiltDao函数**  
+攻击者通过恶意合约调用 ``spiltDao`` 函数，传入合法参数（如 ``_proposalID`` 和 ``_newCurator``）。
+
+- 3、**第一次执行：资金转移先于状态更新**
+合约执行到 ``withdrawRewardFor(msg.sender)`` 时，开始向恶意合约转账 ETH（或其他代币）。  
+     - 转账触发恶意合约的fallback函数（因为接收方是合约地址）。
+     - 
+- 4、**恶意回调：利用未更新的状态重复提款**  
+恶意合约的 ``fallback`` 函数中，再次调用 ``spiltDao`` 函数（或其他提款函数）。  
+     - 此时，第一次调用尚未执行 ``totalSupply -= balances[msg.sender]`` 和 ``balances[msg.sender] = 0``，因此 ``balances[msg.sender] ``（恶意合约的余额）仍然是原始值，``totalSupply`` 也未减少。  
+     - 第二次调用会再次执行 ``withdrawRewardFor(msg.sender)``，向恶意合约重复转账。
+
+- 5、**循环提款直到资金耗尽**  
+恶意合约通过多次回调，在状态变量被更新前反复触发提款逻辑，不断从合约中提取资金。
+
+- 6、**状态更新最终执行，但已无意义**  
+当所有回调结束后，第一次调用才会继续执行 ``totalSupply`` 减少和 ``balances`` 清零的操作，但此时合约资金已被掏空，状态更新无法挽回损失。
+```diff
+function spiltDao(
+     uint _proposalID,
+     address _newCurator
+) noEther onlyTokenholders returns (bool _success) {
+     ......
+-    // 首先更新状态变量（Effects）
+     uint256 senderBalance = balances[msg.sender]; // 先保存余额
+     totalSupply -= senderBalance;  //减少Dao中总金额 
+     balances[msg.sender] = 0;      //将调用者账户清零   
+     paidOut[msg.sender] = 0;
+     
+-    // 最后进行外部调用（Interactions）
+     // Burn DAO Tokens
+     Transfer(msg.sender, 0, senderBalance);
+     withdrawRewardFor(msg.sender);  //把钱还给调用者  
+     
+     return true;          
+}
+```
+
+
+### 【2】以太坊补救
+- (软分叉)：eth升级，与 TheDao 基金相关账户不能做任何交易 **--->** 相关交易不收gas费，导致攻击，矿工只能回滚之前版本，补救失败
+- (硬分叉)：eth升级，挖到192万区块时，强制将 TheDao 上相关的账户资金转到一个新的智能合约上 **--->** 补救成功，产生新链 ETC ，由于与 ETH 公用之前数据，可能导致重入攻击，后添加 ChainID 开区分使之成为两条链
+
+> 攻击根本原因
+
+代码逻辑中**资金转移（withdrawRewardFor）发生在状态变量更新（totalSupply、balances）之前**，导致攻击者可以利用未更新的状态重复触发提款流程。  
+
+> 修复方案
+
+遵循 “Checks-Effects-Interactions” 模式 —— 先更新状态变量（清零余额、减少总供给），再执行外部资金转移（withdrawRewardFor），确保状态更新后无法被重复利用。
