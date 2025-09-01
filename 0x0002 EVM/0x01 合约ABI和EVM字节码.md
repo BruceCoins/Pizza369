@@ -3,7 +3,7 @@
 - 合约 ABI ：是 js 与 EVM 字节码交互的中间商。形如：**前端js代码 < ==== \> 合约ABI \< ===== > EVM 字节码(代码编译后)**  
 
 下图显示了 合约 ABI、EVM字节码和外部组件(dApp 和 网络)的架构，左边是编译过程，右边是交互。
-![]([https://github.com/BruceCoins/Pizza369/blob/main/EVM/image/0x01-1.png](https://github.com/BruceCoins/Pizza369/blob/main/0x0002%20EVM/image/0x01-1.png))  
+![](https://github.com/BruceCoins/Pizza369/blob/main/0x0002%20EVM/image/0x01-1.png)  
 
 ## EVM字节码(ByteCode)
 EVM 字节码 是一种低级编程语言，是机器可读，人不可读的，需从高级编程语言（如 solidity）编译后得到。  
@@ -139,5 +139,6 @@ $ solc --abi -o build -overwrite SampleToken.sol
 ***
 
 [以太坊合约 ABI 和 EVM 字节码](https://learnblockchain.cn/article/3870)  
-在文档 [以太坊安装私有链](https://github.com/BruceCoins/Pizza369/blob/main/docs/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%89%E8%A3%85%E7%A7%81%E6%9C%89%E9%93%BE.docx) 中也有实战操作
+在文档 [以太坊安装私有链](https://github.com/BruceCoins/Pizza369/blob/main/0x0000%20docs/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%A7%81%E6%9C%89%E9%93%BE%E5%AE%89%E8%A3%85.docx) 中也有实战操作
+
 
