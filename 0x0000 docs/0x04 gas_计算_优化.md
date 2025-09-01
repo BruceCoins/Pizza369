@@ -114,7 +114,7 @@ contract Unpacked_Struct{
 }
 ```
 - **打包结构体**  
-```
+```solidity
 contract Packed_Struct{
     struct packedStruct{
         uint64 time;    //64位（8字节）
@@ -377,4 +377,5 @@ Gas = txGas + dataGas + opGas
 [Solidity进阶之gas优化](https://zhuanlan.zhihu.com/p/549858495)  
 [智能合约Gas 优化的几个技术](https://learnblockchain.cn/article/4515)  
 [Solidity Gas优化的奇技淫巧](https://mirror.xyz/0xmobius.eth/xAomQ_AVuYsK9V7VotByi320MqfDM4d_pDiCZ4w-Eok)  
+
 
