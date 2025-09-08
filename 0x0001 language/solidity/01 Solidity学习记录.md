@@ -38,7 +38,7 @@
 - 规则2：存储位置必须是 storage，因此 **可以用在** 合约状态变量、函数中storage变量、库(library)中函数的参数。**不能用于** public函数的参数或返回结果中
 
 ### 5、delete 操作符  
-``delete a`` 让变量 a 的值回到初始化  
+``delete a`` 让变量 a 的值回到初始化，鼓励主动释放空间还会 **返回一些 Gas**  
 [delete 用法](https://www.cnblogs.com/secbro/p/11266263.html)  
 
 ### 6、常数  
@@ -66,6 +66,7 @@ function getUint() public returns(uint256){
 - 只有 **数值** 类型可以用 constant、immutable 修饰；**string 和 bytes** 只能使用 constant，不能使用 immutable 
 
 ### 7、插入排序  
+- **小规模数据（n < 20）：优先用标准插入排序（简单且常数项低）**
 ```solidity
     function insertionSort1(uint[] memory a) public pure returns(uint[] memory){
         for(uint i = 1; i < a.length; i++){
@@ -79,6 +80,58 @@ function getUint() public returns(uint256){
         }
         return(a);
     }
+```
+- **中等规模数据(n > 100)：用二分查找优化的插入排序，平衡实现复杂度和效率**   
+在 “已排序区间” 中查找插入位置时，用二分查找替代线性查找，将查找时间从 O(n) 降至 O(log n)  
+```solidity
+function insertionSortWithBinarySearch(uint[] memory a) public pure returns (uint[] memory) {
+    for (uint i = 1; i < a.length; i++) {
+        uint temp = a[i];
+        // 二分查找插入位置（在 [0, i-1] 区间内）
+        uint left = 0;
+        uint right = i; // 初始右边界为 i（确保能插入到最右侧）
+        
+        // 二分查找核心逻辑
+        while (left < right) {
+            uint mid = left + (right - left) / 2; // 避免溢出
+            if (temp < a[mid]) {
+                right = mid; // 目标在左半区间
+            } else {
+                left = mid + 1; // 目标在右半区间
+            }
+        }
+        // 此时 left = right 即为插入位置
+        uint insertPos = left;
+        
+        // 将 [insertPos, i-1] 区间的元素右移一位
+        for (uint j = i; j > insertPos; j--) {
+            a[j] = a[j - 1];
+        }
+        a[insertPos] = temp;
+    }
+    return a;
+}
+```
+- **较大规模数据(n < 10000)：改用希尔排序（插入排序的扩展），或直接使用快速排序、归并排序等 O(n log n) 算法**  
+将数组按间隔 gap 分成多个子数组，对每个子数组执行插入排序；逐渐减小 gap 至 1，最终完成整个数组的排序。通过预排序使数组 “基本有序”，减少最后一轮插入排序的移动次数
+```solidity
+function shellSort(uint[] memory a) public pure returns (uint[] memory) {
+    uint n = a.length;
+    // 初始 gap 设为数组长度的一半，逐渐减小至 1
+    for (uint gap = n / 2; gap > 0; gap /= 2) {
+        // 对每个子数组执行插入排序
+        for (uint i = gap; i < n; i++) {
+            uint temp = a[i];
+            uint j;
+            // 与同组前一个元素比较，若 smaller 则前移
+            for (j = i; j >= gap && temp < a[j - gap]; j -= gap) {
+                a[j] = a[j - gap];
+            }
+            a[j] = temp;
+        }
+    }
+    return a;
+}
 ```
 
 ### 8、构造函数(contract)、修改器（modifier）  
@@ -921,3 +974,4 @@ contract PairFactory{
   **创建者地址**：调用 ``CREATE2`` 的当前合约（或创建合约）地址    
   **salt(盐)**：一个创建者指定的 ``bytes32`` 类型的值，目的时用来影响新创建的合约的地址    
   **initcode**：新合约的初始字节码（合约的）
+
