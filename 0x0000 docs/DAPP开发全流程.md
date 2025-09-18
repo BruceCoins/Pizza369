@@ -94,3 +94,36 @@ npx hardhat compile
   - 启动本地节点：用 Hardhat 内置节点（npx hardhat node）或 Ganache（可视化本地测试网）；  
   - 编写部署脚本：例如 Hardhat 的deploy.js，指定部署账户和合约参数；  
   - 执行部署：npx hardhat run scripts/deploy.js --network localhost，部署后会返回合约地址（后续前端需用该地址调用合约）。  
+
+### 3. 合约测试（关键环节，避免漏洞）  
+智能合约一旦部署到主网，无法修改，因此必须通过全面测试验证逻辑正确性：  
+- **测试类型：**  
+  - **单元测试：** 验证单个函数的逻辑（如transfer函数是否正确扣减余额），用 Hardhat 的Chai断言库；  
+  - **集成测试：** 验证多个合约的交互（如 Dex 中 “代币兑换” 需调用 “交易合约” 和 “流动性合约”）；  
+  - **压力测试：** 模拟高并发场景（如大量用户同时转账），验证合约性能；  
+  - **安全测试：** 检测常见漏洞（如重入、溢出、权限绕过），可使用工具Slither（Solidity 静态分析工具）。
+  
+- **测试示例**（Hardhat 单元测试）：
+```javascript
+const { expect } = require("chai");
+describe("MyToken", function () {
+  it("Should mint 10000 MTK to deployer", async function () {
+    const [deployer] = await ethers.getSigners(); // 获取部署者账户
+    const MyToken = await ethers.getContractFactory("MyToken");
+    const token = await MyToken.deploy();
+    await token.deployed();
+    // 验证部署者余额是否为10000 * 10^18（decimals默认18）
+    expect(await token.balanceOf(deployer.address)).to.equal(ethers.utils.parseEther("10000"));
+  });
+});
+```
+- **测试覆盖率：** 目标覆盖率需达 80% 以上，用npx hardhat coverage查看覆盖率报告。  
+
+### 4. 智能合约审计（可选但推荐，尤其涉及资产）
+若 DAPP 涉及用户资产（如 DeFi、NFT 交易），建议邀请专业审计机构（如 OpenZeppelin、CertiK、SlowMist）进行审计，排查潜在漏洞。审计流程包括：  
+
+1、审计机构接收合约代码与文档，明确功能需求；   
+2、静态分析（工具检测）+ 人工审核（逻辑漏洞排查）；  
+3、出具审计报告，列出漏洞（高危 / 中危 / 低危）及修复建议；  
+4、开发者修复后，审计机构复审核实。  
+
