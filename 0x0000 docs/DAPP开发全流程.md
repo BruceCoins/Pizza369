@@ -127,3 +127,24 @@ describe("MyToken", function () {
 3、出具审计报告，列出漏洞（高危 / 中危 / 低危）及修复建议；  
 4、开发者修复后，审计机构复审核实。  
 
+## 三、前端开发：用户交互与区块链连接  
+
+前端是 DAPP 的 “用户入口”，核心功能是展示数据（如用户余额、交易记录）和触发合约交互（如转账、 mint NFT），需实现 “钱包连接”“数据查询”“合约调用” 三大核心能力。  
+
+### 1、前端初始化和框架搭建    
+**以React+Ethers.js为例：**  
+(1) 初始化项目：```npx create-react-app dapp-frontend```；  
+(2) 安装依赖：```npm install ethers web3modal @metamask/detect-provider``` （web3modal用于统一钱包连接，@metamask/detect-provider检测 MetaMask 钱包）；  
+(3) 项目结构设计：  
+```
+dapp-frontend/
+├── src/
+│   ├── components/  #  UI组件（如钱包连接按钮、余额显示卡片）
+│   ├── context/     #  全局状态管理（如钱包地址、链ID）
+│   ├── hooks/       #  自定义钩子（如useContract、useBalance）
+│   ├── utils/       #  工具函数（如格式化代币金额）
+│   └── App.js       #  主页面
+```
+
+
+
