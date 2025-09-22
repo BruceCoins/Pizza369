@@ -1,3 +1,9 @@
+- [1.转账](#1转账)
+  - [(1)	transfer](#1transfer)
+  - [(2)	send](#2send)
+  - [(3)	call](#3call)
+
+
 ## 1.转账
 要让合约接收以太币的转账，需要使用 ``payable`` 修饰符
 转账有三种方式：``transfer``、``send``、``call``
