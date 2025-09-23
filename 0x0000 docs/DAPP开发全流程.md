@@ -42,7 +42,7 @@ DAPP（Decentralized Application，去中心化应用）是基于区块链技术
 - **升级机制预留：** 采用代理模式（如 TransparentUpgradeableProxy），避免合约部署后无法修复漏洞（非核心合约可省略，降低复杂度）。
 - **紧急暂停开关：** 所有涉及资产操作的合约需集成 Pausable，出现异常时可快速冻结（如某借贷平台通过暂停功能阻止了闪电贷攻击）
 
-### 1.3 技术栈选型  
+### 1.3 技术栈选型   
 <table style="width:100%; border-collapse: collapse;">
   <colgroup>
     <col style="width:15%">
@@ -85,6 +85,16 @@ DAPP（Decentralized Application，去中心化应用）是基于区块链技术
     </tr>
   </tbody>
 </table>  
+⚠️ 注意事项：     
+
+```javascript
+- Solidity 避免使用 0.8.0 以下版本（无默认溢出检查）；  
+- Rust 需熟悉内存安全规则（避免 use-after-free 等漏洞）。  
+
+- Web3.js 避免使用 v0.x 版本（存在 JSON-RPC 注入漏洞）；  
+- Ethers.js 需锁定版本（防止自动更新引入兼容性问题）。  
+```  
+
 
 ## 二、核心开发：智能合约开发与测试  
 智能合约是 DAPP 的 “后端逻辑”，直接控制区块链上的数据与资产（如 ETH、NFT），其安全性和正确性至关重要，需经过 **“开发 - 编译 - 测试 - 审计”** 四步严格验证。  
@@ -141,14 +151,43 @@ npx hardhat compile
   - **集成测试：** 验证多个合约的交互（如 Dex 中 “代币兑换” 需调用 “交易合约” 和 “流动性合约”）；  
   - **压力测试：** 模拟高并发场景（如大量用户同时转账），验证合约性能；  
   - **安全测试：** 检测常见漏洞（如重入、溢出、权限绕过），可使用工具Slither（Solidity 静态分析工具）。
-  
-| 测试类型 | 工具 / 方法 | 注意事项 |  
-|---|---|---|  
-| 单元测试 | Hardhat + Chai、Truffle + Mocha | 覆盖所有函数分支（如正常流程、异常情况、边界值）；验证权限控制（如非管理员调用受限函数是否失败）。 |  
-| 集成测试 | Hardhat 网络模拟 | 测试多合约交互（如 Dex 中“兑换”需调用“代币合约”和“流动性合约”）；模拟链上环境（如区块高度、时间戳）。 |  
-| 安全测试 | Slither（静态分析）、Mythril（符号执行） | 重点检测重入、溢出、权限漏洞；定期更新工具规则库（新漏洞不断出现）。 |  
-| 压力测试 | Echidna（模糊测试） | 模拟高并发场景（如 1000 个账户同时转账）；检测 Gas 限制（函数是否可能因 Gas 不足失败）。 |
 
+<table style="width:100%; border-collapse: collapse;">
+  <colgroup>
+    <col style="width:20%">
+    <col style="width:30%">
+    <col style="width:50%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>测试类型</th>
+      <th>工具 / 方法</th>
+      <th>注意事项</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>单元测试</td>
+      <td>Hardhat + Chai、Truffle + Mocha</td>
+      <td>覆盖所有函数分支（如正常流程、异常情况、边界值）；验证权限控制（如非管理员调用受限函数是否失败）。</td>
+    </tr>
+    <tr>
+      <td>集成测试</td>
+      <td>Hardhat 网络模拟</td>
+      <td>测试多合约交互（如 Dex 中“兑换”需调用“代币合约”和“流动性合约”）；模拟链上环境（如区块高度、时间戳）。</td>
+    </tr>
+    <tr>
+      <td>安全测试</td>
+      <td>Slither（静态分析）、Mythril（符号执行）</td>
+      <td>重点检测重入、溢出、权限漏洞；定期更新工具规则库（新漏洞不断出现）。</td>
+    </tr>
+    <tr>
+      <td>压力测试</td>
+      <td>Echidna（模糊测试）</td>
+      <td>模拟高并发场景（如 1000 个账户同时转账）；检测 Gas 限制（函数是否可能因 Gas 不足失败）。</td>
+    </tr>
+  </tbody>
+</table>
 - **测试示例**（Hardhat 单元测试）：
 ```javascript
 const { expect } = require("chai");
@@ -446,3 +485,4 @@ DAPP 的去中心化特性决定其依赖社区生态，需建立用户沟通渠
 
   - 若初始合约设计了 “可升级” 机制（如使用 OpenZeppelin 的TransparentUpgradeableProxy代理模式），可通过部署新合约逻辑，并将代理合约指向新逻辑，实现无感知升级；  
   - 若合约不可升级，需发布新合约，并引导用户迁移数据（如将旧 NFT 转账到新合约），同时在社区明确告知迁移原因与步骤。  
+
