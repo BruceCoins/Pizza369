@@ -187,7 +187,8 @@ npx hardhat compile
       <td>模拟高并发场景（如 1000 个账户同时转账）；检测 Gas 限制（函数是否可能因 Gas 不足失败）。</td>
     </tr>
   </tbody>
-</table>
+</table>  
+
 - **测试示例**（Hardhat 单元测试）：
 ```javascript
 const { expect } = require("chai");
@@ -485,4 +486,5 @@ DAPP 的去中心化特性决定其依赖社区生态，需建立用户沟通渠
 
   - 若初始合约设计了 “可升级” 机制（如使用 OpenZeppelin 的TransparentUpgradeableProxy代理模式），可通过部署新合约逻辑，并将代理合约指向新逻辑，实现无感知升级；  
   - 若合约不可升级，需发布新合约，并引导用户迁移数据（如将旧 NFT 转账到新合约），同时在社区明确告知迁移原因与步骤。  
+
 
