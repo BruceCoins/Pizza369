@@ -103,7 +103,7 @@ DAPP（Decentralized Application，去中心化应用）是基于区块链技术
 ### 2.1 智能合约开发（核心逻辑编写）
 根据需求编写合约代码，需遵循对应区块链的合约规范（如 Ethereum 的 ERC 标准、Solana 的 Program 规范），以下以 **Ethereum+Solidity** 为例：  
 - **开发要点：**  
-  -  遵循标准协议：如 ERC20（代币）、ERC721（NFT）、ERC4626（收益聚合器），减少兼容性问题。  
+  - 遵循标准协议：如 ERC20（代币）、ERC721（NFT）、ERC4626（收益聚合器），减少兼容性问题。  
   - 权限控制：关键函数（如提款、暂停合约）需限制权限（使用 OpenZeppelin 的 Ownable 或 AccessControl）。  
   - 状态变量保护：敏感变量（如用户余额）需用 private 修饰，避免直接外部访问。  
   
@@ -111,11 +111,17 @@ DAPP（Decentralized Application，去中心化应用）是基于区块链技术
   - 代币类 DAPP：遵循 ERC20（同质化代币，如 USDT）或 ERC721/ERC1155（NFT，如数字藏品）标准；  
   - 借贷类 DAPP：可参考 Compound、Aave 的合约架构（如抵押率计算、利息模型）。  
 
-- **安全注意事项：**    
-  - 避免使用tx.origin（可能被钓鱼攻击），优先用msg.sender；   
-  - 防止重入攻击（用ReentrancyGuard合约，或遵循 “先更新状态，再转账” 原则）；  
-  - 控制权限（如仅管理员可执行的函数，用Ownable合约）；  
-  - 整数安全：Solidity 0.8.x 前需用 SafeMath 库，避免溢出 / 下溢（如uint256 a = 0; a--;会溢出）。
+- **高频漏洞及防御方案：**    
+| 漏洞类型 | 典型场景 | 防御方案 |  
+|---|---|---|  
+| 重入攻击 | 外部合约调用后未更新状态，导致重复提款 | 1. 使用 OpenZeppelin 的 ReentrancyGuard； 2. 遵循“检查 - 生效 - 交互”（CEI）模式：先更新余额，再调用外部合约。 |  
+| 权限漏洞 | 管理员函数未限制权限，任何人可调用 | 1. 使用 Ownable 或 AccessControl 控制权限； 2. 关键操作（如提款）采用多签验证；  3.避免使用tx.origin（可能被钓鱼攻击），优先用msg.sender。 |  
+| 整数溢出 / 下溢 | 余额计算时超出变量范围（如uint256 a = 0; a--;会溢出） | 1. 使用 Solidity 0.8.x 及以上版本（默认溢出检查）； 2. 低版本需引入 SafeMath 库。 |  
+| 伪随机数漏洞 | 用 block.timestamp 或 blockhash 作为随机数 | 1. 接入 Chainlink VRF 获取可信随机数； 2. 避免依赖链上可预测数据生成随机数。 |  
+| 零地址操作 | 向 0x0 地址转账导致资产永久锁定 | 所有外部地址参数需添加 `require(to != address(0), "Invalid address")` 校验。 |  
+
+
+
 
 - **核心逻辑示例**（简单 ERC20 代币合约）：
 ```solidity
