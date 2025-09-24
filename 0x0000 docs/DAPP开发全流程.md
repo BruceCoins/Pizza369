@@ -124,12 +124,15 @@ DAPP（Decentralized Application，去中心化应用）是基于区块链技术
 
 
 
-- **核心逻辑示例**（简单 ERC20 代币合约）：
+- **核心逻辑示例**  
+
+（1）简单 ERC20 代币合约：
 ```solidity
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17; // 指定Solidity版本
+pragma solidity ^0.8.17; 
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol"; // 引入开源ERC20实现（避免重复造轮子）
+// 引入开源ERC20实现（避免重复造轮子）
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol"; 
 
 contract MyToken is ERC20 {
     // 构造函数：初始化代币名称（MyToken）和符号（MTK），并 mint 10000 代币给部署者
@@ -137,7 +140,33 @@ contract MyToken is ERC20 {
         _mint(msg.sender, 10000 * 10 ** decimals());
     }
 }
+```  
+（2）防重入攻击转账：检查 - 生效 - 交互  
+```solidity
+//SPDX-License-Identifier: MIT  
+pragma soldity ^0.8.19;
+
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+concontract SecurityTransfer is ReentrancyGuard{
+  mapping(address => uint256) public balances;
+
+  //带重入保护的提款函数  
+  function withdraw(uint256 amount) external nonReentrant{
+    // 1.检查条件  
+    require(balances[msg.sender] >= amount, "Insufficient balance");
+
+    // 2.更新状态（先扣减余额，再转账）  
+    balances[msg.sender] -= amount;
+
+    // 3.转账  
+    (bool success,) = msg.sender.call{value:amount}("");
+    require(success, "Transfer failed");
+  }
+}
+
 ```
+
 
 ### 2.2 合约编译与本地部署  
 将 Solidity/Rust 代码编译为区块链可执行的字节码，并部署到 **本地测试网**（避免消耗真实代币）：  
